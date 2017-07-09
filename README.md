@@ -11,4 +11,5 @@ Client-side of the GraphLabs project.
 * Clone or update this repository to your computer
 * Open repository in your IDE (WebStorm recommended)
 * Run command: npm install (OR yarn)
-* Run command: npm start (OR yarn start)
+* Run command for development mode: npm run startDev (OR yarn run startDev)
+* Run command for production mode: npm start (OR yarn start)
