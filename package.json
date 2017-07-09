@@ -1,0 +1,14 @@
+{
+  "name": "GraphLabs.Web.Client",
+  "author": "GraphLabs",
+  "description": "Client-side of the GraphLabs web project",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  },
+  "scripts": {
+    "start": "tsc && node build/index.js"
+  }
+}
