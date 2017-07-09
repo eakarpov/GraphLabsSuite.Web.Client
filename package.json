@@ -2,6 +2,7 @@
   "name": "GraphLabs.Web.Client",
   "author": "GraphLabs",
   "description": "Client-side of the GraphLabs web project",
+  "version": "0.0.1",
   "dependencies": {
 
   },
@@ -9,6 +10,8 @@
 
   },
   "scripts": {
-    "start": "tsc && node build/index.js"
+    "startDev": "tsc && set NODE_ENV=development && node build/main.js",
+    "start": "tsv && set NODE_ENV=production && node build/main.js",
+    "compile": "tsc"
   }
 }
