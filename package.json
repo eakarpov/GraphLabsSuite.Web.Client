@@ -1,17 +1,23 @@
 {
-  "name": "GraphLabs.Web.Client",
-  "author": "GraphLabs",
-  "description": "Client-side of the GraphLabs web project",
-  "version": "0.0.1",
+  "name": "graphlabs.web.client",
+  "version": "0.1.0",
+  "private": true,
   "dependencies": {
-
-  },
-  "devDependencies": {
-
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-scripts-ts": "2.17.0"
   },
   "scripts": {
-    "startDev": "tsc && set NODE_ENV=development && node build/main.js",
-    "start": "tsc && set NODE_ENV=production && node build/main.js",
-    "compile": "tsc"
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.9.2",
+    "@types/react": "^16.4.12",
+    "@types/react-dom": "^16.0.7",
+    "typescript": "^3.0.1"
   }
 }
