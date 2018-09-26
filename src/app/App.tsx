@@ -4,14 +4,14 @@ import './App.css';
 import Footer from "./layouts/Footer/Footer";
 import Navbar from "./layouts/Navbar";
 import Routes from "./router/Routes";
+import {Component} from "react";
 
-class App extends React.Component {
+class App extends Component {
   public render() {
       return (
       <Router>
           <div>
-              <Navbar/>
-              <Routes/>
+              <Navbar App={Routes}/>
               <Footer/>
           </div>
       </Router>
