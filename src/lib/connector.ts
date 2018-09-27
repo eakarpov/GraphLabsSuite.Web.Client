@@ -1,3 +1,5 @@
+import {failure, success} from "fp-ts/lib/Validation";
+
 let config: any;
 
 export function init(conf?: any) {
@@ -11,7 +13,12 @@ export default class Connector {
     public static makeUrl(url: string) {
         return `${init().hostBase}${url}`;
     }
-      public static get(url: string) {
-          return fetch(Connector.makeUrl(url)).then(res => res.json());
+      public static async get(url: string) {
+        try {
+            const res = await fetch(Connector.makeUrl(url));
+            return success(res);
+        } catch(e) {
+            return failure(e);
+        }
       }
 };
