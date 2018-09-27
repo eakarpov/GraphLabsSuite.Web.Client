@@ -1,16 +1,8 @@
 import * as React from 'react';
 import {Component} from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import {styles} from "./styles";
+import {Table} from "reactstrap";
 
 interface Props {
-  classes: any;
   rows: any[];
 }
 
@@ -19,36 +11,33 @@ class GTable extends Component<Props> {
     rows: [],
   };
   public render() {
-    const {classes} = this.props;
-
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Название</TableCell>
-              <TableCell>Описание</TableCell>
-              <TableCell>Версия</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+        <Table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Версия</th>
+            </tr>
+            </thead>
+          <tbody>
             {this.props.rows.map(row => {
               return (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell>{row.description}</TableCell>
-                  <TableCell>{row.version}</TableCell>
-                </TableRow>
+                <tr key={row.id}>
+                  <th scope="row">
+                    {row.id}
+                  </th>
+                    <td>{row.name}</td>
+                  <td>{row.description}</td>
+                  <td>{row.version}</td>
+                </tr>
               );
             })}
-          </TableBody>
+          </tbody>
         </Table>
-      </Paper>
     );
   }
 }
 
-export default withStyles(styles)(GTable);
+export default GTable;
