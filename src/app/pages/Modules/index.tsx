@@ -2,8 +2,25 @@ import * as React from 'react';
 import {Component} from "react";
 import GTable from "../../containers/Table";
 import {Col, Container, Row} from "reactstrap";
+import {connect} from "react-redux";
+import {RootState} from "../../../redux/rootReducer";
+import {actions} from "../../../redux/actions";
+import {ModulesState} from "../../../redux/reducers/modules";
 
-class Modules extends Component {
+interface DispatchProps {
+    getModules: any;
+}
+
+interface StateToProps {
+  modules: ModulesState;
+}
+
+type Props = DispatchProps & StateToProps;
+
+class Modules extends Component<Props> {
+  public componentDidMount() {
+    this.props.getModules();
+  }
   public render() {
     return (<Container>
         <Row>
@@ -11,11 +28,19 @@ class Modules extends Component {
             <h1>
               Лабораторные модули
             </h1>
-            <GTable rows={[]}/>
+            <GTable rows={this.props.modules.data}/>
           </Col>
         </Row>
     </Container>);
   }
 }
 
-export default Modules;
+const mapStateToProps = (state: RootState) => ({
+   modules: state.modules,
+});
+
+const mapDispatchToProps = {
+  getModules: actions.getModules,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Modules);

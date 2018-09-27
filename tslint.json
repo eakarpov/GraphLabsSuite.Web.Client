@@ -5,7 +5,8 @@
     "object-literal-sort-keys": false,
     "interface-name": false,
     "jsx-boolean-value": false,
-    "no-empty-interface": false
+    "no-empty-interface": false,
+    "no-string-literal": false
   },
   "linterOptions": {
     "exclude": [
