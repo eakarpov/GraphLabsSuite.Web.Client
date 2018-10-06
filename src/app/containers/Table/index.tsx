@@ -22,15 +22,15 @@ class GTable extends Component<Props> {
             </tr>
             </thead>
           <tbody>
-            {this.props.rows.map(row => {
+            {this.props.rows.map((row, i) => {
               return (
-                <tr key={row.id}>
+                <tr key={i}>
                   <th scope="row">
-                    {row.id}
+                    {row.Id}
                   </th>
-                    <td>{row.name}</td>
-                  <td>{row.description}</td>
-                  <td>{row.version}</td>
+                    <td>{row.Name}</td>
+                  <td>{row.Description}</td>
+                  <td>{row.Version}</td>
                 </tr>
               );
             })}

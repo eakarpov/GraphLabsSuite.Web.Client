@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import Connector from '../../lib/connector';
 // import {createAction} from "typesafe-actions";
 import {actions} from "./index";
-import {Validation} from "../../../node_modules/fp-ts/lib/Validation";
+import {Validation} from "fp-ts/lib/Validation";
 
 export const modules = {
     getModules: () => {
@@ -10,10 +10,10 @@ export const modules = {
             dispatch(actions['getTaskModulesAsyncStart']());
             // dispatch(modules.getModulesAsyncStart());
             Connector.get('odata/TaskModules')
-                .then((res: Validation<any, string>) => {
-                    const data = res.getOrElse("");
-                    if (data) {
-                        dispatch(actions['getTaskModulesAsyncSuccess'](data));
+                .then((res: Validation<string, { value?: any[]}>) => {
+                    const data = res.getOrElse({});
+                    if (data.value) {
+                        dispatch(actions['getTaskModulesAsyncSuccess']({ data: data.value }));
                     } else {
                         dispatch(actions['getTaskModulesAsyncFail']());
                     }
