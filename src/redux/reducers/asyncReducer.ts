@@ -79,19 +79,21 @@ export function createAsyncReducer<T extends IPageableState<any> | AsyncState>(
         switch (action.type) {
             case getType(args.pending): return pendingData;
             case getType(args.fail): return errorData;
-            case getType(args.success): return action.payload ? action.payload.data && Array.isArray(action.payload.data) ? {
-                    initial: false,
-                    pending: false,
-                    error: false,
-                    ...action.payload,
-                } as T
-                : {
-                    initial: false,
-                    pending: false,
-                    error: false,
-                    data: action.payload,
-                } as T
-                : initialState;
+            case getType(args.success): {
+                return action.payload ? action.payload.data && Array.isArray(action.payload.data) ? {
+                        initial: false,
+                        pending: false,
+                        error: false,
+                        ...action.payload,
+                    } as T
+                    : {
+                        initial: false,
+                        pending: false,
+                        error: false,
+                        data: action.payload,
+                    } as T
+                    : initialState;
+            }
             default: return args.sync ? args.sync(state, action) : state;
         }
     };

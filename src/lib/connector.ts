@@ -16,7 +16,7 @@ export default class Connector {
       public static async get(url: string) {
         try {
             const res = await fetch(Connector.makeUrl(url));
-            return success(res);
+            return success(await res.json());
         } catch(e) {
             return failure(e);
         }
