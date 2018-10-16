@@ -1,17 +1,16 @@
 import {Component} from "react";
 import {RouteComponentProps} from "react-router";
 import {connect} from "react-redux";
-import {RootState} from "../../../redux/rootReducer";
 import {actions} from "../../../redux/actions";
 // import {Dispatch} from "redux";
 // import {GetEntityAction} from "../../../types/redux";
 
-interface StateToProps {
+interface DispatchProps {
   // getModule: (id: number) => Dispatch<GetEntityAction>;
   getModule: any;
 }
 
-type Props = RouteComponentProps<{ moduleId?: string }> & StateToProps;
+type Props = RouteComponentProps<{ moduleId?: string }> & DispatchProps;
 
 class Module extends Component<Props> {
   public componentDidMount() {
@@ -24,6 +23,6 @@ class Module extends Component<Props> {
   }
 }
 
-export default connect((state: RootState) => ({
+export default connect(null, {
   getModule: actions.getModule,
-}))(Module);
+})(Module);

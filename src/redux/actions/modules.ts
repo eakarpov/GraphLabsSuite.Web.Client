@@ -27,11 +27,11 @@ export const modules = {
     getModule: (id: number) => {
       return (dispatch: Dispatch) => {
         dispatch(actions['getTaskModuleAsyncStart']());
-        Connector.get(`odata/TaskModules(${id})/GraphLabs.Download(path="service-worker.js")`)
-          .then((res: Validation<any, string>) => {
-            const data = res.getOrElse('');
+        Connector.get(`odata/TaskModules(${id})/GraphLabs.Download(path='service-worker.js')`)
+          .then((res: Validation<string, { value?: any }>) => {
+            const data = res.getOrElse({});
             if (data) {
-              dispatch(actions['getTaskModuleAsyncSuccess'](data));
+              dispatch(actions['getTaskModuleAsyncSuccess']({ data: data.value }));
             } else {
               dispatch(actions['getTaskModuleAsyncFail']());
             }
