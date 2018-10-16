@@ -1,7 +1,7 @@
-import {createAction} from 'typesafe-actions';
 import {AppAction} from '../../types/redux';
 import {ACTION_TYPES} from './index';
 import {QueryParamsEntry} from "../../types/QueryParamsEntry";
+import {createAction} from "typesafe-actions";
 
 export function createServiceAction(serviceName: string, actions: string[]): {[key: string]: AppAction}  {
     const resActions: any = {};

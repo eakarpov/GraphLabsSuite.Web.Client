@@ -11,5 +11,5 @@ export enum ACTION_TYPES {
 
 export const actions = {
     ...modules,
-    ...createServiceAction('TaskModule', [ACTION_TYPES.GET]),
+    ...createServiceAction('TaskModule', [ACTION_TYPES.GET, ACTION_TYPES.GET_ONE]),
 };

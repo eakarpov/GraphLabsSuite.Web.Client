@@ -1,15 +1,21 @@
 import * as React from 'react';
-import {Component} from 'react';
+import {Component, SyntheticEvent} from 'react';
 import {Table} from "reactstrap";
+import {RouteComponentProps, withRouter} from "react-router";
+import {ModuleData} from "../../../redux/reducers/modules";
 
-interface Props {
-  rows: any[];
+interface Props extends RouteComponentProps<{}> {
+  rows: ModuleData[];
 }
 
 class GTable extends Component<Props> {
   public static defaulProps = {
     rows: [],
   };
+  constructor(props: Props) {
+    super(props);
+    this.onRowClick = this.onRowClick.bind(this);
+  }
   public render() {
     return (
         <Table>
@@ -24,7 +30,7 @@ class GTable extends Component<Props> {
           <tbody>
             {this.props.rows.map((row, i) => {
               return (
-                <tr key={i}>
+                <tr key={row.Id} onClick={this.onRowClick(row.Id)} style={{ cursor: 'pointer' }}>
                   <th scope="row">
                     {row.Id}
                   </th>
@@ -38,6 +44,11 @@ class GTable extends Component<Props> {
         </Table>
     );
   }
+  private onRowClick(id: number) {
+    return (e: SyntheticEvent<HTMLTableRowElement>) => {
+      this.props.history.push(`/module/${id}`)
+    }
+  }
 }
 
-export default GTable;
+export default withRouter(GTable);

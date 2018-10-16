@@ -2,11 +2,12 @@ import { createStore, applyMiddleware, Middleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, {RootState} from './rootReducer';
-import {getInitialArray} from "./reducers/asyncReducer";
+import {getInitialArray, getInitialObject} from "./reducers/asyncReducer";
 import {ModuleData} from "./reducers/modules";
 
 const initial = {
   modules: getInitialArray<ModuleData>(),
+  module: getInitialObject<any>(),
 };
 
 export function configureStore(initialState: RootState): Store<RootState> {

@@ -1,16 +1,18 @@
 import {Dispatch} from "redux";
 import Connector from '../../lib/connector';
-// import {createAction} from "typesafe-actions";
 import {actions} from "./index";
 import {Validation} from "fp-ts/lib/Validation";
+import {ModuleData} from "../reducers/modules";
 
 export const modules = {
     getModules: () => {
         return (dispatch: Dispatch) => {
             dispatch(actions['getTaskModulesAsyncStart']());
             // dispatch(modules.getModulesAsyncStart());
+            //tslint:disable
+            console.log('asdasda');
             Connector.get('odata/TaskModules')
-                .then((res: Validation<string, { value?: any[]}>) => {
+                .then((res: Validation<string, { value?: ModuleData[]}>) => {
                     const data = res.getOrElse({});
                     if (data.value) {
                         dispatch(actions['getTaskModulesAsyncSuccess']({ data: data.value }));
@@ -18,9 +20,23 @@ export const modules = {
                         dispatch(actions['getTaskModulesAsyncFail']());
                     }
                     // dispatch(modules.getModulesAsyncSuccess(res))
-                })
+                });
                 // dispatch(modules.getModulesAsyncFail());
         };
+    },
+    getModule: (id: number) => {
+      return (dispatch: Dispatch) => {
+        dispatch(actions['getTaskModuleAsyncStart']());
+        Connector.get(`odata/TaskModules(${id})/GraphLabs.Download(path="service-worker.js")`)
+          .then((res: Validation<any, string>) => {
+            const data = res.getOrElse('');
+            if (data) {
+              dispatch(actions['getTaskModuleAsyncSuccess'](data));
+            } else {
+              dispatch(actions['getTaskModuleAsyncFail']());
+            }
+          });
+      }
     },
     // setModules: (modules: any[]) => ({
     //     type: 'SET_MODULES',
