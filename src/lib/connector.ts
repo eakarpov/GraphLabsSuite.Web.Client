@@ -21,4 +21,12 @@ export default class Connector {
             return failure(e);
         }
       }
+    public static async fetch(url: string) {
+        try {
+            const res = await fetch(Connector.makeUrl(url));
+            return success(await res.text());
+        } catch(e) {
+            return failure(e);
+        }
+    }
 };

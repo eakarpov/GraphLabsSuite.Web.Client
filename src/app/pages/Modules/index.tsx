@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {RootState} from "../../../redux/rootReducer";
 import {actions} from "../../../redux/actions";
 import {ModulesState} from "../../../redux/reducers/modules";
+import AsyncWrapper from "../../containers/AsyncWrapper";
 
 interface DispatchProps {
     getModules: any;
@@ -28,7 +29,9 @@ class Modules extends Component<Props> {
             <h1>
               Лабораторные модули
             </h1>
-            <GTable rows={this.props.modules.data}/>
+              <AsyncWrapper state={[this.props.modules]}>
+                <GTable rows={this.props.modules.data}/>
+              </AsyncWrapper>
           </Col>
         </Row>
     </Container>);

@@ -27,11 +27,19 @@ export const modules = {
     getModule: (id: number) => {
       return (dispatch: Dispatch) => {
         dispatch(actions['getTaskModuleAsyncStart']());
-        Connector.get(`odata/TaskModules(${id})/GraphLabs.Download(path='service-worker.js')`)
-          .then((res: Validation<string, { value?: any }>) => {
+        const url = (id: number, file: string) => `odata/TaskModules(${id})/GraphLabs.Download(path='${file}')`;
+        Connector.get(url(id, 'asset-manifest.json'))
+          .then(async (res: Validation<string, { value?: any }>) => {
             const data = res.getOrElse({});
+            const js = (await Connector.fetch(url(id, encodeURIComponent(data['main.js']))) as Validation<string, { value?: any }>)
+                .getOrElse({});
+            const css = (await Connector.fetch(url(id, encodeURIComponent(data['main.css']))) as Validation<string, { value?: any }>)
+                .getOrElse({});
             if (data) {
-              dispatch(actions['getTaskModuleAsyncSuccess']({ data: data.value }));
+              dispatch(actions['getTaskModuleAsyncSuccess']({
+                  js,
+                  css,
+              }));
             } else {
               dispatch(actions['getTaskModuleAsyncFail']());
             }
