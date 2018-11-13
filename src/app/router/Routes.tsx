@@ -5,7 +5,7 @@ import Module from "../pages/Module";
 import Home from "../pages/Home";
 
 const Routes = () => (
-    <div style={{ minHeight: 'calc(100vh - 56px - 23px)', height: 'calc(100vh - 56px - 23px)' }}>
+    <div style={{ flexGrow: 1 }}>
         <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/modules" component={Modules}/>
