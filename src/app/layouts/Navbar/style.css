@@ -1,0 +1,12 @@
+.header {
+    background-color: #e8edef;
+    border-bottom: 2px solid #5c7e94;
+}
+
+.header > a {
+    color: #5c7e94;
+}
+
+.header-title {
+    color: #5c7e94;
+}

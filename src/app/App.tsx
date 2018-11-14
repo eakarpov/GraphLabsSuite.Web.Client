@@ -14,7 +14,7 @@ class App extends Component {
       return (
           <Provider store={store}>
               <Router>
-                  <div>
+                  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                       <Navbar/>
                       <Routes/>
                       <Footer/>

@@ -7,6 +7,8 @@ import {
 import {Component} from "react";
 import {RouteComponentProps, withRouter} from "react-router";
 import {mainListItems} from "../../menus/MainMenu";
+import './style.css';
+import * as logo from '../../../resources/logo.png';
 
 interface Props extends RouteComponentProps<{}> {
 
@@ -27,8 +29,8 @@ class GNavbar extends Component<Props, State> {
     public render() {
         return (
             <div>
-                <Navbar color="dark" dark expand="md">
-                    <NavbarBrand href="/">GraphLabs</NavbarBrand>
+                <Navbar expand="md" className="header">
+                    <NavbarBrand href="/"><img src={logo} /></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         {mainListItems}

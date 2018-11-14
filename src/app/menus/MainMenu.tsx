@@ -4,7 +4,7 @@ import {Nav, NavItem, NavLink} from "reactstrap";
 export const mainListItems = (
   <Nav className="ml-auto" navbar>
       <NavItem>
-          <NavLink href="/modules">Модули</NavLink>
+          <NavLink href="/modules" className="header-title">Модули</NavLink>
       </NavItem>
   </Nav>
 );
