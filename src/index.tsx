@@ -8,7 +8,7 @@ import {Promise} from 'bluebird';
 global.Promise = Promise;
 
 init({
-    hostBase: 'http://graphlabs-backend.eastus.azurecontainer.io:5000/'
+    hostBase: 'http://gl-backend.svtz.ru:5000/'
 });
 
 ReactDOM.render(

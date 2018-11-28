@@ -35,6 +35,9 @@ export const modules = {
                 .getOrElse({});
             const css = (await Connector.fetch(url(id, encodeURIComponent(data['main.css']))) as Validation<string, { value?: any }>)
                 .getOrElse({});
+            const variantData = (await Connector.fetch(`odata/GetRandomVariant(taskId=${id})`) as Validation<string, string>);
+            const variantJSON = variantData.getOrElse("");
+            sessionStorage.setItem('variant', variantJSON);
             if (data) {
               dispatch(actions['getTaskModuleAsyncSuccess']({
                   js,
