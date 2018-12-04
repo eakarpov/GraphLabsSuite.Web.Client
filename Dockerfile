@@ -15,9 +15,9 @@ CMD if [ ${APP_ENV} = production ]; \
 	npm install -g http-server && \
 	npm run build && \
 	cd build && \
-	hs -p 3000; \
+	hs -p 5050; \
 	else \
 	npm run start; \
 	fi
 
-EXPOSE 3000
+EXPOSE 5050
