@@ -17,7 +17,7 @@ CMD if [ ${APP_ENV} = production ]; \
 	cd build && \
 	hs -p 5050; \
 	else \
-	npm run start; \
+	npm start; \
 	fi
 
 EXPOSE 5050
