@@ -29,4 +29,15 @@ export default class Connector {
             return failure(e);
         }
     }
+    public static async post(url: string, body: any) {
+        try {
+            const res = await fetch(Connector.makeUrl(url), {
+                method: 'post',
+                body: JSON.stringify(body),
+            });
+            return success(await res.text());
+        } catch(e) {
+            return failure(e);
+        }
+    }
 };

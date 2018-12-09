@@ -6,5 +6,8 @@ export const mainListItems = (
       <NavItem>
           <NavLink href="/modules" className="header-title">Модули</NavLink>
       </NavItem>
+      <NavItem>
+          <NavLink href="/auth" className="header-title">Вход</NavLink>
+      </NavItem>
   </Nav>
 );
