@@ -10,8 +10,7 @@ export const modules = {
             dispatch(actions['getTaskModulesAsyncStart']());
             // dispatch(modules.getModulesAsyncStart());
             //tslint:disable
-            console.log('asdasda');
-            Connector.get('odata/TaskModules')
+            Connector.get('odata/taskModules')
                 .then((res: Validation<string, { value?: ModuleData[]}>) => {
                     const data = res.getOrElse({});
                     if (data.value) {
@@ -27,7 +26,7 @@ export const modules = {
     getModule: (id: number) => {
       return (dispatch: Dispatch) => {
         dispatch(actions['getTaskModuleAsyncStart']());
-        const url = (id: number, file: string) => `odata/TaskModules(${id})/GraphLabs.Download(path='${file}')`;
+        const url = (id: number, file: string) => `odata/taskModules(${id})/download(path='${file}')`;
         Connector.get(url(id, 'asset-manifest.json'))
           .then(async (res: Validation<string, { value?: any }>) => {
             const data = res.getOrElse({});
@@ -35,7 +34,7 @@ export const modules = {
                 .getOrElse({});
             const css = (await Connector.fetch(url(id, encodeURIComponent(data['main.css']))) as Validation<string, { value?: any }>)
                 .getOrElse({});
-            const variantData = (await Connector.fetch(`odata/GetRandomVariant(taskId=${id})`) as Validation<string, string>);
+            const variantData = (await Connector.fetch(`odata/taskModules(${id})/randomVariant`) as Validation<string, string>);
             const variantJSON = variantData.getOrElse("");
             sessionStorage.setItem('variant', variantJSON);
             if (data) {

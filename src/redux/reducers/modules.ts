@@ -13,10 +13,10 @@ import {IPageableState} from "../../types/redux";
 // }
 
 export interface ModuleData {
-    Id: number;
-    Name: string;
-    Description: string;
-    Version: string;
+    id: number;
+    name: string;
+    description: string;
+    version: string;
 }
 
 export interface ModulesState extends IPageableState<ModuleData> {}

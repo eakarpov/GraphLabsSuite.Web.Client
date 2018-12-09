@@ -30,13 +30,13 @@ class GTable extends Component<Props> {
           <tbody>
             {this.props.rows.map((row, i) => {
               return (
-                <tr key={row.Id} onClick={this.onRowClick(row.Id)} style={{ cursor: 'pointer' }}>
+                <tr key={row.id} onClick={this.onRowClick(row.id)} style={{ cursor: 'pointer' }}>
                   <th scope="row">
-                    {row.Id}
+                    {row.id}
                   </th>
-                    <td>{row.Name}</td>
-                  <td>{row.Description}</td>
-                  <td>{row.Version}</td>
+                    <td>{row.name}</td>
+                  <td>{row.description}</td>
+                  <td>{row.version}</td>
                 </tr>
               );
             })}
