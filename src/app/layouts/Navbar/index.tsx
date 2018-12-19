@@ -9,9 +9,14 @@ import {RouteComponentProps, withRouter} from "react-router";
 import {mainListItems} from "../../menus/MainMenu";
 import './style.css';
 import * as logo from '../../../resources/logo.png';
+import {connect} from "react-redux";
+import {RootState} from "../../../redux/rootReducer";
+import {AppState} from "../../../redux/reducers/state";
+import {actions} from "../../../redux/actions";
 
 interface Props extends RouteComponentProps<{}> {
-
+    state: AppState;
+    setLogged: (val: boolean) => void;
 }
 
 interface State {
@@ -25,6 +30,12 @@ class GNavbar extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.toggle = this.toggle.bind(this);
+        this.logout = this.logout.bind(this);
+    }
+    public logout() {
+        localStorage.removeItem('gl-token');
+        this.props.setLogged(false);
+        this.props.history.push('/');
     }
     public render() {
         return (
@@ -33,7 +44,7 @@ class GNavbar extends Component<Props, State> {
                     <NavbarBrand href="/"><img src={logo} /></NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
-                        {mainListItems}
+                        {mainListItems(this.props.state.logged, this.logout)}
                     </Collapse>
                 </Navbar>
             </div>
@@ -46,4 +57,8 @@ class GNavbar extends Component<Props, State> {
     }
 }
 
-export default withRouter(GNavbar);
+export default connect((state: RootState) => ({
+    state: state.state,
+}), {
+    setLogged: actions.setLogged,
+})(withRouter(GNavbar));

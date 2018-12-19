@@ -15,7 +15,11 @@ export default class Connector {
     }
       public static async get(url: string) {
         try {
-            const res = await fetch(Connector.makeUrl(url));
+            const res = await fetch(Connector.makeUrl(url), {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
+                },
+            });
             return success(await res.json());
         } catch(e) {
             return failure(e);
@@ -23,8 +27,26 @@ export default class Connector {
       }
     public static async fetch(url: string) {
         try {
-            const res = await fetch(Connector.makeUrl(url));
+            const res = await fetch(Connector.makeUrl(url), {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
+                },
+            });
             return success(await res.text());
+        } catch(e) {
+            return failure(e);
+        }
+    }
+    public static async login(url: string, body: any) {
+        try {
+            const res = await fetch(Connector.makeUrl(url), {
+                method: 'post',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            return success(await res.json());
         } catch(e) {
             return failure(e);
         }
@@ -34,6 +56,10 @@ export default class Connector {
             const res = await fetch(Connector.makeUrl(url), {
                 method: 'post',
                 body: JSON.stringify(body),
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
+                  'Content-Type': 'application/json',
+                },
             });
             return success(await res.text());
         } catch(e) {

@@ -1,4 +1,5 @@
 import { modules }from "./modules";
+import { state } from './state';
 import {createServiceAction} from "./actionCreators";
 
 export enum ACTION_TYPES {
@@ -11,5 +12,6 @@ export enum ACTION_TYPES {
 
 export const actions = {
     ...modules,
+    ...state,
     ...createServiceAction('TaskModule', [ACTION_TYPES.GET, ACTION_TYPES.GET_ONE]),
 };

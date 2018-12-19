@@ -2,9 +2,13 @@ import {Component} from "react";
 import * as React from "react";
 import {Button, Container, Form, FormGroup, Input, Label} from "reactstrap";
 import Connector from "../../../lib/connector";
+import {Validation} from "fp-ts/lib/Validation";
+import {connect} from "react-redux";
+import {actions} from "../../../redux/actions";
+import {RouteComponentProps, withRouter} from "react-router";
 
-export interface Props {
-
+export interface Props extends RouteComponentProps<any> {
+    setLogged: (value: boolean) => void;
 }
 
 class Login extends Component<Props> {
@@ -21,7 +25,12 @@ class Login extends Component<Props> {
     public login() {
         const password = this.password ? this.password.value : '';
         const email = this.email ? this.email.value : '';
-        Connector.post('odata/auth', { email, password });
+        Connector.login('auth/login', { email, password })
+            .then((data: Validation<string, {token: string}>) => {
+            localStorage.setItem('gl-token', data.getOrElse({ token: ''}).token);
+            this.props.setLogged(true);
+            this.props.history.push('/modules');
+        });
     }
 
     public render() {
@@ -50,4 +59,6 @@ class Login extends Component<Props> {
         this.email = i;
     }
 }
-export default Login;
+export default connect(null, {
+    setLogged: actions.setLogged,
+})(withRouter(Login));

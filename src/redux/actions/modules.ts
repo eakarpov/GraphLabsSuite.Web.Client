@@ -8,8 +8,6 @@ export const modules = {
     getModules: () => {
         return (dispatch: Dispatch) => {
             dispatch(actions['getTaskModulesAsyncStart']());
-            // dispatch(modules.getModulesAsyncStart());
-            //tslint:disable
             Connector.get('odata/taskModules')
                 .then((res: Validation<string, { value?: ModuleData[]}>) => {
                     const data = res.getOrElse({});
@@ -18,15 +16,13 @@ export const modules = {
                     } else {
                         dispatch(actions['getTaskModulesAsyncFail']());
                     }
-                    // dispatch(modules.getModulesAsyncSuccess(res))
                 });
-                // dispatch(modules.getModulesAsyncFail());
         };
     },
     getModule: (id: number) => {
       return (dispatch: Dispatch) => {
         dispatch(actions['getTaskModuleAsyncStart']());
-        const url = (id: number, file: string) => `odata/taskModules(${id})/download(path='${file}')`;
+        const url = (ID: number, file: string) => `odata/taskModules(${ID})/download(path='${file}')`;
         Connector.get(url(id, 'asset-manifest.json'))
           .then(async (res: Validation<string, { value?: any }>) => {
             const data = res.getOrElse({});
@@ -48,14 +44,4 @@ export const modules = {
           });
       }
     },
-    // setModules: (modules: any[]) => ({
-    //     type: 'SET_MODULES',
-    //     payload: modules,
-    // }),
-    // getModulesAsyncStart: createAction('GET_MODULES_ASYNC_START'),
-    // getModulesAsyncFail: createAction('GET_MODULES_ASYNC_FAIL'),
-    // getModulesAsyncSuccess: createAction('GET_MODULES_ASYNC_SUCCESS',
-    //     resolve => (res: any[]) => resolve({
-    //     payload: res,
-    // })),
 };

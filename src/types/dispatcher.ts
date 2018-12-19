@@ -5,3 +5,10 @@ export interface IQueryParamsEntry {
     $select?: any;
     $filter?: any;
 }
+
+export interface Interface {
+    a: Array<{
+        Action: string;
+        VariantId: number;
+    }>;
+}

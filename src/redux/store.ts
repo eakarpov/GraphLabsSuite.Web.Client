@@ -8,6 +8,7 @@ import {ModuleData} from "./reducers/modules";
 const initial = {
   modules: getInitialArray<ModuleData>(),
   module: getInitialObject<any>(),
+  state: { logged: false },
 };
 
 export function configureStore(initialState: RootState): Store<RootState> {
