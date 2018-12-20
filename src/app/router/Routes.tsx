@@ -4,12 +4,14 @@ import Modules from "../pages/Modules";
 import Module from "../pages/Module";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Results from "../pages/Results";
 
 const Routes = () => (
     <div style={{ flexGrow: 1 }}>
         <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/auth" exact component={Login}/>
+            <Route path="/results" exact component={Results} />
             <Route path="/modules" component={Modules}/>
             <Route path="/module/:moduleId" component={Module}/>
         </Switch>

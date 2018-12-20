@@ -46,6 +46,9 @@ export default class Connector {
                     'Content-Type': 'application/json',
                 },
             });
+            if (res.status === 400) {
+                return failure('Not authenticated!');
+            }
             return success(await res.json());
         } catch(e) {
             return failure(e);

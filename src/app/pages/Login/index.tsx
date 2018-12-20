@@ -11,7 +11,15 @@ export interface Props extends RouteComponentProps<any> {
     setLogged: (value: boolean) => void;
 }
 
-class Login extends Component<Props> {
+interface State {
+    error: string;
+}
+
+class Login extends Component<Props, State> {
+    public state = {
+        error: '',
+    };
+
     private password: HTMLInputElement|null;
     private email: HTMLInputElement|null;
 
@@ -27,9 +35,15 @@ class Login extends Component<Props> {
         const email = this.email ? this.email.value : '';
         Connector.login('auth/login', { email, password })
             .then((data: Validation<string, {token: string}>) => {
-            localStorage.setItem('gl-token', data.getOrElse({ token: ''}).token);
-            this.props.setLogged(true);
-            this.props.history.push('/modules');
+                data.fold(() => {
+                    this.setState({
+                        error: 'Не правильный логин/пароль',
+                    });
+                }, (e => {
+                    localStorage.setItem('gl-token', e.token);
+                    this.props.setLogged(true);
+                    this.props.history.push('/modules');
+                }));
         });
     }
 
@@ -45,7 +59,8 @@ class Login extends Component<Props> {
                       <Label for="password">Пароль</Label>
                       <Input innerRef={this.setPassword} type="password" name="password" id="password"/>
                   </FormGroup>
-                  <Button onClick={this.login}>Submit</Button>
+                  {this.state.error && <p style={{ color: 'red'}}>{this.state.error}</p>}
+                  <Button onClick={this.login}>Войти</Button>
               </Form>
           </Container>
         );

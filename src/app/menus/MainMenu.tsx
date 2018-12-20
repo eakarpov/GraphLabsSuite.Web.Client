@@ -13,6 +13,11 @@ export const mainListItems = (logged: boolean, onClick: () => void) => (
           </NavItem>)}
       {logged && (
           <NavItem>
+              <NavLink href="/results" className="header-title" onClick={onClick}>Результаты</NavLink>
+          </NavItem>
+      )}
+      {logged && (
+          <NavItem>
               <NavLink href="" className="header-title" onClick={onClick}>Выход</NavLink>
           </NavItem>
       )}

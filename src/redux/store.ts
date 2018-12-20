@@ -4,11 +4,13 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer, {RootState} from './rootReducer';
 import {getInitialArray, getInitialObject} from "./reducers/asyncReducer";
 import {ModuleData} from "./reducers/modules";
+import {ResultData} from "./reducers/results";
 
 const initial = {
   modules: getInitialArray<ModuleData>(),
   module: getInitialObject<any>(),
   state: { logged: false },
+  results: getInitialArray<ResultData>(),
 };
 
 export function configureStore(initialState: RootState): Store<RootState> {
