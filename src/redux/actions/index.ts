@@ -16,5 +16,5 @@ export const actions = {
     ...state,
     ...results,
     ...createServiceAction('TaskModule', [ACTION_TYPES.GET, ACTION_TYPES.GET_ONE]),
-    ...createServiceAction('Result', [ACTION_TYPES.GET]),
+    ...createServiceAction('TaskVariantLog', [ACTION_TYPES.GET]),
 };

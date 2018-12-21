@@ -5,15 +5,14 @@ import {IPageableState} from "../../types/redux";
 
 export interface ResultData {
     id: number;
-    name: string;
-    description: string;
-    version: string;
+    action: string;
+    variantId: number;
 }
 
 export interface ResultsState extends IPageableState<ResultData> {}
 
 export const reducer: Reducer<ResultsState> = createAsyncReducer<ResultsState>({
-    pending: actions['getResultsAsyncStart'],
-    fail: actions['getResultsAsyncFail'],
-    success: actions['getResultsAsyncSuccess'],
+    pending: actions['getTaskVariantLogsAsyncStart'],
+    fail: actions['getTaskVariantLogsAsyncFail'],
+    success: actions['getTaskVariantLogsAsyncSuccess'],
 });

@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {Component} from "react";
-import GTable from "../../containers/Table";
 import {Col, Container, Row} from "reactstrap";
 import {connect} from "react-redux";
 import {RootState} from "../../../redux/rootReducer";
 import {actions} from "../../../redux/actions";
 import AsyncWrapper from "../../containers/AsyncWrapper";
-import {ResultsState} from "../../../redux/reducers/results";
+import {ResultData, ResultsState} from "../../../redux/reducers/results";
+import T from './RTable';
 
 interface DispatchProps {
     getResults: any;
@@ -22,6 +22,7 @@ class Results extends Component<Props> {
     public componentDidMount() {
         this.props.getResults();
     }
+
     public render() {
         return (<Container>
             <Row>
@@ -30,11 +31,27 @@ class Results extends Component<Props> {
                         Результаты
                     </h1>
                     <AsyncWrapper state={[this.props.results]}>
-                        <GTable rows={this.props.results.data}/>
+                        <T
+                            headers={['ID', 'Действие', 'Вариант']}
+                            rows={this.props.results.data}
+                            renderer={this.renderer}
+                        />
                     </AsyncWrapper>
                 </Col>
             </Row>
         </Container>);
+    }
+
+    private renderer(row: ResultData) {
+        return (
+            <React.Fragment>
+                <th scope="row">
+                    {row.id}
+                </th>
+                <td>{row.action}</td>
+                <td>{row.variantId}</td>
+            </React.Fragment>
+        );
     }
 }
 

@@ -7,14 +7,14 @@ import {ModuleData} from "../reducers/modules";
 export const results = {
     getResults: () => {
         return (dispatch: Dispatch) => {
-            dispatch(actions['getResultsAsyncStart']());
+            dispatch(actions['getTaskVariantLogsAsyncStart']());
             Connector.get('odata/taskVariantLogs')
                 .then((res: Validation<string, { value?: ModuleData[]}>) => {
                     const data = res.getOrElse({});
                     if (data.value) {
-                        dispatch(actions['getResultsAsyncSuccess']({ data: data.value }));
+                        dispatch(actions['getTaskVariantLogsAsyncSuccess']({ data: data.value }));
                     } else {
-                        dispatch(actions['getResultsAsyncFail']());
+                        dispatch(actions['getTaskVariantLogsAsyncFail']());
                     }
                 });
         };

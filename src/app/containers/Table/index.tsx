@@ -1,18 +1,22 @@
 import * as React from 'react';
-import {Component, SyntheticEvent} from 'react';
+import {Component, SFC, SyntheticEvent} from 'react';
 import {Table} from "reactstrap";
-import {RouteComponentProps, withRouter} from "react-router";
-import {ModuleData} from "../../../redux/reducers/modules";
 
-interface Props extends RouteComponentProps<{}> {
-  rows: ModuleData[];
+interface Props<T> {
+  rows: T[];
+  headers: string[];
+  renderer: SFC<any>;
+  onRowClick?: (id: number) => void;
 }
 
-class GTable extends Component<Props> {
+class GTable<T extends { id: number }> extends Component<Props<T>> {
   public static defaulProps = {
     rows: [],
+    onRowClick: () => {
+        // tslint:disable
+    },
   };
-  constructor(props: Props) {
+  constructor(props: Props<T>) {
     super(props);
     this.onRowClick = this.onRowClick.bind(this);
   }
@@ -21,22 +25,16 @@ class GTable extends Component<Props> {
         <Table>
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Название</th>
-                <th>Описание</th>
-                <th>Версия</th>
+                {this.props.headers.map((e: string) => (
+                    <th>{e}</th>
+                ))}
             </tr>
             </thead>
           <tbody>
-            {this.props.rows.map((row, i) => {
+            {this.props.rows.map((row: { id: number}) => {
               return (
                 <tr key={row.id} onClick={this.onRowClick(row.id)} style={{ cursor: 'pointer' }}>
-                  <th scope="row">
-                    {row.id}
-                  </th>
-                    <td>{row.name}</td>
-                  <td>{row.description}</td>
-                  <td>{row.version}</td>
+                    {this.props.renderer(row)}
                 </tr>
               );
             })}
@@ -46,9 +44,9 @@ class GTable extends Component<Props> {
   }
   private onRowClick(id: number) {
     return (e: SyntheticEvent<HTMLTableRowElement>) => {
-      this.props.history.push(`/module/${id}`)
+        this.props.onRowClick && this.props.onRowClick(id);
     }
   }
 }
 
-export default withRouter(GTable);
+export default GTable;
