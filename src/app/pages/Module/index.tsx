@@ -23,6 +23,12 @@ type Props = RouteComponentProps<{ moduleId?: string }> & DispatchProps & StateT
 class Module extends Component<Props> {
     private iframe: HTMLIFrameElement;
 
+    constructor(props: Props) {
+        super(props);
+        this.iframeOnLoad = this.iframeOnLoad.bind(this);
+    }
+
+
     public componentDidMount() {
         const id = parseInt(this.props.match.params.moduleId || '0', 10);
         this.props.getModule(id);

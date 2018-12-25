@@ -20,6 +20,11 @@ interface StateToProps {
 type Props = DispatchProps & StateToProps & RouteComponentProps<{}>;
 
 class Modules extends Component<Props> {
+    constructor(props: Props) {
+        super(props);
+        this.onRowClick = this.onRowClick.bind(this);
+    }
+
     public componentDidMount() {
         this.props.getModules();
     }
