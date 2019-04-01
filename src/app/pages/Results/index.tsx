@@ -7,6 +7,7 @@ import {actions} from "../../../redux/actions";
 import AsyncWrapper from "../../containers/AsyncWrapper";
 import {ResultData, ResultsState} from "../../../redux/reducers/results";
 import T from './RTable';
+import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 
 interface DispatchProps {
     getResults: any;
@@ -16,7 +17,7 @@ interface StateToProps {
     results: ResultsState;
 }
 
-type Props = DispatchProps & StateToProps;
+type Props = DispatchProps & StateToProps & InjectedAuthRouterProps;
 
 class Results extends Component<Props> {
     public componentDidMount() {

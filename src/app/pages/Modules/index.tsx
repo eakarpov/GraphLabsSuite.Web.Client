@@ -8,6 +8,7 @@ import {ModuleData, ModulesState} from "../../../redux/reducers/modules";
 import AsyncWrapper from "../../containers/AsyncWrapper";
 import {RouteComponentProps, withRouter} from "react-router";
 import T from './MTable';
+import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 
 interface DispatchProps {
     getModules: any;
@@ -17,7 +18,7 @@ interface StateToProps {
     modules: ModulesState;
 }
 
-type Props = DispatchProps & StateToProps & RouteComponentProps<{}>;
+type Props = DispatchProps & StateToProps & RouteComponentProps<{}> & InjectedAuthRouterProps;
 
 class Modules extends Component<Props> {
     constructor(props: Props) {

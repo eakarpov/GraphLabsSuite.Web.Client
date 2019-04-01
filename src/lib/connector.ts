@@ -1,4 +1,4 @@
-import {failure, success} from "fp-ts/lib/Validation";
+import {failure, success, Validation} from "fp-ts/lib/Validation";
 
 let config: any;
 
@@ -13,26 +13,26 @@ export default class Connector {
     public static makeUrl(url: string) {
         return `${init().hostBase}${url}`;
     }
-      public static async get(url: string) {
+      public static async get<T = { value?: any }>(url: string): Promise<Validation<string, T>> {
         try {
             const res = await fetch(Connector.makeUrl(url), {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
                 },
             });
-            return success(await res.json());
+            return success<string, T>(await res.json());
         } catch(e) {
             return failure(e);
         }
       }
-    public static async fetch(url: string) {
+    public static async fetch(url: string): Promise<Validation<string, string>> {
         try {
             const res = await fetch(Connector.makeUrl(url), {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
                 },
             });
-            return success(await res.text());
+            return success<string, string>(await res.text());
         } catch(e) {
             return failure(e);
         }
