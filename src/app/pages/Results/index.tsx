@@ -8,6 +8,11 @@ import AsyncWrapper from "../../containers/AsyncWrapper";
 import {ResultData, ResultsState} from "../../../redux/reducers/results";
 import T from './RTable';
 import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
+import Modal from "reactstrap/lib/Modal";
+import ModalHeader from "reactstrap/lib/ModalHeader";
+import ModalBody from "reactstrap/lib/ModalBody";
+import ModalFooter from "reactstrap/lib/ModalFooter";
+import Button from "reactstrap/lib/Button";
 
 interface DispatchProps {
     getResults: any;
@@ -19,7 +24,23 @@ interface StateToProps {
 
 type Props = DispatchProps & StateToProps & InjectedAuthRouterProps;
 
-class Results extends Component<Props> {
+interface State {
+    modal: boolean;
+}
+
+class Results extends Component<Props, State> {
+    public state = {
+      modal: false,
+    };
+
+    public constructor(props: Props) {
+        super(props);
+        this.toggle = this.toggle.bind(this);
+        this.confirm = this.confirm.bind(this);
+        this.decline = this.decline.bind(this);
+    }
+
+
     public componentDidMount() {
         this.props.getResults();
     }
@@ -31,6 +52,7 @@ class Results extends Component<Props> {
                     <h1>
                         Результаты
                     </h1>
+                    <Button outline color="secondary" onClick={this.toggle}>Фильтр</Button>
                     <AsyncWrapper state={[this.props.results]}>
                         <T
                             headers={['ID', 'Действие', 'Вариант']}
@@ -40,7 +62,31 @@ class Results extends Component<Props> {
                     </AsyncWrapper>
                 </Col>
             </Row>
+            <Modal isOpen={this.state.modal} toggle={this.toggle}>
+                <ModalHeader toggle={this.toggle}>Фильтр результатов</ModalHeader>
+                <ModalBody>
+                    asdasd
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="primary" onClick={this.confirm}>Применить фильтр</Button>{' '}
+                    <Button color="secondary" onClick={this.decline}>Сбросить фильтр</Button>
+                </ModalFooter>
+            </Modal>
         </Container>);
+    }
+
+    private toggle() {
+        this.setState({
+            modal: !this.state.modal,
+        });
+    }
+
+    private confirm() {
+        this.toggle();
+    }
+
+    private decline() {
+        this.toggle();
     }
 
     private renderer(row: ResultData) {
