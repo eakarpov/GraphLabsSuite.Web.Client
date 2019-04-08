@@ -22,6 +22,10 @@ class Api {
         return Connector.fetch(`odata/taskModules(${id})/randomVariant`);
     }
 
+    public uploadModule(archive: any) {
+        return Connector.post(`odata/taskModules(1)/upload`, archive);
+    }
+
     private url = (ID: number, file: string) => `odata/taskModules(${ID})/download(path='${file}')`;
 }
 

@@ -7,13 +7,16 @@ import Login from "../pages/Login";
 import Results from "../pages/Results";
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import {RootState} from "../../redux/rootReducer";
+import Upload from '../pages/Upload';
+
+// tslint:disable
 
 const userIsAuthenticated = connectedRouterRedirect({
     // The url to redirect user to if they fail
     redirectPath: '/login',
     // If selector is true, wrapper will not redirect
     // For example let's check that state contains user data
-    authenticatedSelector: (state: RootState) => console.log(state.state) || state.state.logged,
+    authenticatedSelector: (state: RootState) => state.state.logged,
     // A nice display name for this check
     wrapperDisplayName: 'UserIsAuthenticated'
 });
@@ -25,7 +28,8 @@ const Routes = () => (
             <Route path="/auth" exact component={Login}/>
             <Route path="/results" exact component={userIsAuthenticated(Results)} />
             <Route path="/modules" component={userIsAuthenticated(Modules)}/>
-            <Route path="/module/:moduleId" component={Module}/>
+            <Route path="/module/:moduleId" component={userIsAuthenticated(Module)}/>
+            <Route path="/upload" component={userIsAuthenticated(Upload)} />
         </Switch>
     </div>
 );

@@ -25,8 +25,8 @@ class GTable<T extends { id: number }> extends Component<Props<T>> {
         <Table>
             <thead>
             <tr>
-                {this.props.headers.map((e: string) => (
-                    <th>{e}</th>
+                {this.props.headers.map((e: string, index: number) => (
+                    <th key={index}>{e}</th>
                 ))}
             </tr>
             </thead>

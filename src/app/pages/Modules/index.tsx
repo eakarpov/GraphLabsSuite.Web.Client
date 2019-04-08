@@ -9,6 +9,8 @@ import AsyncWrapper from "../../containers/AsyncWrapper";
 import {RouteComponentProps, withRouter} from "react-router";
 import T from './MTable';
 import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
+import Button from "reactstrap/lib/Button";
+import {Link} from "react-router-dom";
 
 interface DispatchProps {
     getModules: any;
@@ -41,6 +43,7 @@ class Modules extends Component<Props> {
                     <h1>
                         Лабораторные модули
                     </h1>
+                    <Button tag={Link} to="/upload" outline color="secondary">Загрузить новый</Button>
                     <AsyncWrapper state={[this.props.modules]}>
                         <T
                             rows={this.props.modules.data}

@@ -6,6 +6,7 @@ import * as React from "react";
 import {RootState} from "../../../redux/rootReducer";
 import {ModuleState} from "../../../redux/reducers/module";
 import AsyncWrapper from "../../containers/AsyncWrapper";
+import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 // import {Dispatch} from "redux";
 // import {GetEntityAction} from "../../../types/redux";
 
@@ -18,7 +19,7 @@ interface DispatchProps {
     getModule: any;
 }
 
-type Props = RouteComponentProps<{ moduleId?: string }> & DispatchProps & StateToProps;
+type Props = RouteComponentProps<{ moduleId?: string }> & DispatchProps & StateToProps & InjectedAuthRouterProps;
 
 class Module extends Component<Props> {
     private iframe: HTMLIFrameElement;

@@ -15,7 +15,7 @@ export default class Connector {
     }
       public static async get<T = { value?: any }>(url: string): Promise<Validation<string, T>> {
         try {
-            const res = await fetch(Connector.makeUrl(url), {
+            const res = await fetch(Connector.makeUrl(url), { 
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
                 },
