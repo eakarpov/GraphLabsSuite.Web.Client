@@ -69,4 +69,20 @@ export default class Connector {
             return failure(e);
         }
     }
+
+    public static async upload(url: string, body: any, mime: string = 'text/plain') {
+        try {
+            const res = await fetch(Connector.makeUrl(url), {
+                method: 'post',
+                body,
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
+                    'Content-Type': mime,
+                },
+            });
+            return success(await res.text());
+        } catch(e) {
+            return failure(e);
+        }
+    }
 };

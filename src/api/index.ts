@@ -23,7 +23,7 @@ class Api {
     }
 
     public uploadModule(archive: any) {
-        return Connector.post(`odata/taskModules(1)/upload`, archive);
+        return Connector.upload(`odata/taskModules(1)/upload`, archive, 'application/zip');
     }
 
     private url = (ID: number, file: string) => `odata/taskModules(${ID})/download(path='${file}')`;
