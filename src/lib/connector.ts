@@ -72,12 +72,14 @@ export default class Connector {
 
     public static async upload(url: string, body: any, mime: string = 'text/plain') {
         try {
+            const formData = new FormData();
+            formData.append("file", body);
             const res = await fetch(Connector.makeUrl(url), {
                 method: 'post',
-                body,
+                body: formData,
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
-                    'Content-Type': mime,
+                    'Content-Type': 'text/plain',
                 },
             });
             return success(await res.text());
