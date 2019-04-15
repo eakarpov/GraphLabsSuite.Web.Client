@@ -11,8 +11,6 @@ import Button from "reactstrap/lib/Button";
 import api from '../../../api';
 import {RouteComponentProps} from "react-router";
 
-// tslint:disable
-
 export interface UploadProps {
 
 }
@@ -67,7 +65,7 @@ export default class Upload extends Component<Props> {
         if (this.file) {
             const file: File|null = this.file.files && this.file.files[0];
             if (file) {
-                reader.readAsDataURL(file);
+                reader.readAsArrayBuffer(file);
             } else {
                 this.file.src = '';
             }
