@@ -2,7 +2,7 @@ import {Dispatch} from "redux";
 import {actions} from "./index";
 import {Validation} from "fp-ts/lib/Validation";
 import {ModuleData} from "../reducers/modules";
-import api from '../../api';
+import api, {AssetManifest} from '../../api';
 
 export const modules = {
     getModules: () => {
@@ -23,10 +23,13 @@ export const modules = {
       return (dispatch: Dispatch) => {
         dispatch(actions['getTaskModuleAsyncStart']());
         api.getModuleManifest(id)
-          .then(async (res: Validation<string, { value?: any }>) => {
-            const data = res.getOrElse({});
-            const js = (await api.getModuleCode(id, data.value)).getOrElse("");
-            const css = (await api.getModuleStyle(id, data.value)).getOrElse("");
+          .then(async (
+              res: Validation<string, AssetManifest>
+          ) => {
+            const data = res.getOrElse({} as AssetManifest);
+            const js = (await api.getModuleCode(id, data)).getOrElse("");
+            const css = (await api.getModuleStyle(id, data)).getOrElse("");
+            // const html = (await api.getModuleHtml(id, data)).getOrElse("");
             const variantData = await api.getVariant(id);
             const variantJSON = variantData.getOrElse("");
             sessionStorage.setItem('variant', variantJSON);
@@ -34,6 +37,7 @@ export const modules = {
               dispatch(actions['getTaskModuleAsyncSuccess']({
                   js,
                   css,
+                  // html,
               }));
             } else {
               dispatch(actions['getTaskModuleAsyncFail']());
