@@ -26,6 +26,16 @@ class Api {
         return Connector.upload(`odata/taskModules(1)/upload`, archive, 'application/zip');
     }
 
+    public getResults(filter?: any) {
+        let url = '';
+        if (filter) {
+            Object.keys(filter).forEach((key: string) => {
+               url += `$filter=substringof('${key}', ${filter[key]}) eq true`;
+            });
+        }
+        return Connector.get('odata/taskVariantLogs' + url);
+    }
+
     private url = (ID: number, file: string) => `odata/taskModules(${ID})/download(path='${file}')`;
 }
 
