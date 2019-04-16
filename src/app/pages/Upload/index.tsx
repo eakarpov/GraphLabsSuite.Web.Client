@@ -19,10 +19,12 @@ type Props = UploadProps & RouteComponentProps<{}> & InjectedAuthRouterProps;
 
 export default class Upload extends Component<Props> {
     private file!: HTMLInputElement|null;
+    private id!: HTMLInputElement|null;
 
     constructor(props: Props) {
         super(props);
         this.setRef = this.setRef.bind(this);
+        this.setId = this.setId.bind(this);
         this.onButtonClick = this.onButtonClick.bind(this);
     }
 
@@ -40,6 +42,10 @@ export default class Upload extends Component<Props> {
                             без нее самой).
                         </FormText>
                     </FormGroup>
+                    <FormGroup>
+                        <Label for="moduleId">Индентификатор</Label>
+                        <Input innerRef={this.setId} name="moduleId" id="moduleId" />
+                    </FormGroup>
                     <Button onClick={this.onButtonClick}>Загрузить</Button>
                 </Form>
             </Container>
@@ -50,11 +56,15 @@ export default class Upload extends Component<Props> {
         this.file = i;
     }
 
+    private setId(i: HTMLInputElement|null) {
+        this.id = i;
+    }
+
     private onButtonClick() {
         const reader = new FileReader();
 
         reader.onloadend = () => {
-            api.uploadModule(reader.result).then(() => {
+            api.uploadModule(this.id && this.id.value || '1', reader.result).then(() => {
                 this.props.history.push('/upload');
                 alert('Module successfully uploaded!');
             }).catch(() => {

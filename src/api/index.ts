@@ -32,16 +32,17 @@ class Api {
         return Connector.fetch(`odata/taskModules(${id})/randomVariant`);
     }
 
-    public uploadModule(archive: any) {
-        return Connector.upload(`odata/taskModules(1)/upload`, archive, 'application/zip');
+    public uploadModule(id: string, archive: any) {
+        return Connector.upload(`odata/taskModules(${id})/upload`, archive, 'application/zip');
     }
 
     public getResults(filter?: any) {
         let url = '';
         if (filter) {
             Object.keys(filter).forEach((key: string) => {
-                url += `$filter=substringof('${key}', ${filter[key]}) eq true`;
+                url += `$filter=substringof('${key}', ${filter[key]}) eq true and `;
             });
+            url = url.slice(5);
         }
         return Connector.get('odata/taskVariantLogs' + url);
     }

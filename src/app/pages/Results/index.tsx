@@ -13,6 +13,7 @@ import ModalHeader from "reactstrap/lib/ModalHeader";
 import ModalBody from "reactstrap/lib/ModalBody";
 import ModalFooter from "reactstrap/lib/ModalFooter";
 import Button from "reactstrap/lib/Button";
+import {AppState} from "../../../redux/reducers/state";
 
 interface DispatchProps {
     getResults: any;
@@ -20,6 +21,7 @@ interface DispatchProps {
 
 interface StateToProps {
     results: ResultsState;
+    state: AppState;
 }
 
 type Props = DispatchProps & StateToProps & InjectedAuthRouterProps;
@@ -40,6 +42,20 @@ class Results extends Component<Props, State> {
         this.decline = this.decline.bind(this);
     }
 
+    public get admin(): boolean {
+        if (this.props.state.userData) {
+            return this.props.state.userData.role === 'Teacher';
+        }
+        return false;
+    }
+
+    public get headers(): string[] {
+        const arr = ['ID', 'Действие', 'Вариант'];
+        if (this.admin) {
+            arr.push('Студент');
+        }
+        return arr;
+    }
 
     public componentDidMount() {
         this.props.getResults();
@@ -55,7 +71,7 @@ class Results extends Component<Props, State> {
                     <Button outline color="secondary" onClick={this.toggle}>Фильтр</Button>
                     <AsyncWrapper state={[this.props.results]}>
                         <T
-                            headers={['ID', 'Действие', 'Вариант']}
+                            headers={this.headers}
                             rows={this.props.results.data}
                             renderer={this.renderer}
                         />
@@ -97,6 +113,7 @@ class Results extends Component<Props, State> {
                 </th>
                 <td>{row.action}</td>
                 <td>{row.variantId}</td>
+                {this.admin && <td>{row.studentId}</td>}
             </React.Fragment>
         );
     }
@@ -104,6 +121,7 @@ class Results extends Component<Props, State> {
 
 const mapStateToProps = (state: RootState) => ({
     results: state.results,
+    state: state.state,
 });
 
 const mapDispatchToProps = {
