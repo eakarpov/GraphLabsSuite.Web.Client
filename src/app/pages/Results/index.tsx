@@ -40,6 +40,7 @@ class Results extends Component<Props, State> {
         this.toggle = this.toggle.bind(this);
         this.confirm = this.confirm.bind(this);
         this.decline = this.decline.bind(this);
+        this.renderer = this.renderer.bind(this);
     }
 
     public get admin(): boolean {
@@ -50,7 +51,7 @@ class Results extends Component<Props, State> {
     }
 
     public get headers(): string[] {
-        const arr = ['ID', 'Действие', 'Вариант'];
+        const arr = ['ID', 'Действие', 'Вариант', 'Модуль', 'Время'];
         if (this.admin) {
             arr.push('Студент');
         }
@@ -81,7 +82,7 @@ class Results extends Component<Props, State> {
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
                 <ModalHeader toggle={this.toggle}>Фильтр результатов</ModalHeader>
                 <ModalBody>
-                    asdasd
+                    лд
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={this.confirm}>Применить фильтр</Button>{' '}
@@ -113,6 +114,8 @@ class Results extends Component<Props, State> {
                 </th>
                 <td>{row.action}</td>
                 <td>{row.variantId}</td>
+                <td>{row.moduleId}</td>
+                <td>{row.dateTime}</td>
                 {this.admin && <td>{row.studentId}</td>}
             </React.Fragment>
         );

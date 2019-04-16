@@ -9,6 +9,7 @@ export interface ResultData {
     variantId: number;
     studentId: number;
     dateTime: string;
+    moduleId: number;
 }
 
 export interface ResultsState extends IPageableState<ResultData> {}
