@@ -10,6 +10,7 @@ const initial = {
   modules: getInitialArray<ModuleData>(),
   module: getInitialObject<any>(),
   state: { logged: false },
+  me: getInitialObject<any>(),
   results: getInitialArray<ResultData>(),
 };
 

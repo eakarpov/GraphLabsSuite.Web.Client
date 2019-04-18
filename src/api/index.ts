@@ -36,6 +36,10 @@ class Api {
         return Connector.upload(`odata/taskModules(${id})/upload`, archive, 'application/zip');
     }
 
+    public me(): Promise<Validation<string, any>>  {
+        return Connector.fetch(`odata/currentUser`);
+    }
+
     public getResults(filter?: any) {
         let url = '';
         if (filter) {

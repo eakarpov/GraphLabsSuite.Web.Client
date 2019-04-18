@@ -11,6 +11,7 @@ import {store} from "../redux/store";
 import {actions} from "../redux/actions";
 import * as jwt_decode from 'jwt-decode';
 import {UserData} from "../types/user";
+import AuthWrapper from './containers/AuthWrapper';
 
 class App extends Component {
   public componentWillMount() {
@@ -25,11 +26,11 @@ class App extends Component {
       return (
           <Provider store={store}>
               <Router>
-                  <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <AuthWrapper>
                       <Navbar/>
                       <Routes/>
                       <Footer/>
-                  </div>
+                    </AuthWrapper>
               </Router>
           </Provider>
     );
