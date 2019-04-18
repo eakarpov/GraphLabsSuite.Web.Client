@@ -22,9 +22,7 @@ class AuthWrapper extends Component<AuthProps> {
 }
 
 
-const mapStateToProps = (state: RootState) => ({
-
-});
+const mapStateToProps = (state: RootState) => ({});
 
 const mapDispatchToProps = {
     getMe: actions.getMe,
