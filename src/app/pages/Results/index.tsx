@@ -107,16 +107,17 @@ class Results extends Component<Props, State> {
     }
 
     private renderer(row: ResultData) {
+        const date = new Date(row.dateTime);
         return (
             <React.Fragment>
                 <th scope="row">
                     {row.id}
                 </th>
                 <td>{row.action}</td>
-                <td>{row.variantId}</td>
-                <td>{row.moduleId}</td>
-                <td>{row.dateTime}</td>
-                {this.admin && <td>{row.studentId}</td>}
+                <td>{row.variant.name}</td>
+                <td>{row.variant.taskModule.name}</td>
+                <td>{date.toLocaleDateString()} {date.toLocaleTimeString()}</td>
+                {this.admin && <td>{row.student.email}</td>}
             </React.Fragment>
         );
     }

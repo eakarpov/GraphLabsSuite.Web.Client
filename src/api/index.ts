@@ -41,14 +41,14 @@ class Api {
     }
 
     public getResults(filter?: any) {
-        let url = '';
+        // $expand=student,variant($expand=taskModule)
+        let url = '$expand=student,variant($expand=taskModule)';
         if (filter) {
             Object.keys(filter).forEach((key: string) => {
-                url += `$filter=substringof('${key}', ${filter[key]}) eq true and `;
+                url += ` and $filter=substringof('${key}', ${filter[key]}) eq true`;
             });
-            url = url.slice(5);
         }
-        return Connector.get('odata/taskVariantLogs' + url);
+        return Connector.get('odata/taskVariantLogs?' + url);
     }
 
     private getModuleFile(

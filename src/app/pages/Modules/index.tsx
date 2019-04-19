@@ -11,6 +11,7 @@ import T from './MTable';
 import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 import Button from "reactstrap/lib/Button";
 import {Link} from "react-router-dom";
+import {AppState} from "../../../redux/reducers/state";
 
 interface DispatchProps {
     getModules: any;
@@ -18,6 +19,7 @@ interface DispatchProps {
 
 interface StateToProps {
     modules: ModulesState;
+    state: AppState;
 }
 
 type Props = DispatchProps & StateToProps & RouteComponentProps<{}> & InjectedAuthRouterProps;
@@ -32,7 +34,16 @@ class Modules extends Component<Props> {
         this.props.getModules();
     }
 
+    public get admin(): boolean {
+        if (this.props.state.userData) {
+            return this.props.state.userData.role === 'Teacher';
+        }
+        return false;
+    }
+
     public onRowClick(id: number) {
+        //tslint:disable
+        console.log(this.props.history);
         this.props.history.push(`/module/${id}`);
     }
 
@@ -43,7 +54,7 @@ class Modules extends Component<Props> {
                     <h1>
                         Лабораторные модули
                     </h1>
-                    <Button tag={Link} to="/upload" outline color="secondary">Загрузить новый</Button>
+                    {this.admin && <Button tag={Link} to="/upload" outline color="secondary">Загрузить новый</Button>}
                     <AsyncWrapper state={[this.props.modules]}>
                         <T
                             rows={this.props.modules.data}
@@ -72,6 +83,7 @@ class Modules extends Component<Props> {
 
 const mapStateToProps = (state: RootState) => ({
     modules: state.modules,
+    state: state.state,
 });
 
 const mapDispatchToProps = {
