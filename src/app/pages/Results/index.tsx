@@ -4,9 +4,7 @@ import {Col, Container, Row} from "reactstrap";
 import {connect} from "react-redux";
 import {RootState} from "../../../redux/rootReducer";
 import {actions} from "../../../redux/actions";
-import AsyncWrapper from "../../containers/AsyncWrapper";
 import {ResultData, ResultsState} from "../../../redux/reducers/results";
-import T from './RTable';
 import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 import Modal from "reactstrap/lib/Modal";
 import ModalHeader from "reactstrap/lib/ModalHeader";
@@ -14,6 +12,11 @@ import ModalBody from "reactstrap/lib/ModalBody";
 import ModalFooter from "reactstrap/lib/ModalFooter";
 import Button from "reactstrap/lib/Button";
 import {AppState} from "../../../redux/reducers/state";
+import Form from "reactstrap/lib/Form";
+import FormGroup from "reactstrap/lib/FormGroup";
+import Label from "reactstrap/lib/Label";
+import Input from "reactstrap/lib/Input";
+import P from './RPage';
 
 interface DispatchProps {
     getResults: any;
@@ -58,10 +61,6 @@ class Results extends Component<Props, State> {
         return arr;
     }
 
-    public componentDidMount() {
-        this.props.getResults();
-    }
-
     public render() {
         return (<Container>
             <Row>
@@ -70,19 +69,35 @@ class Results extends Component<Props, State> {
                         Результаты
                     </h1>
                     <Button outline color="secondary" onClick={this.toggle}>Фильтр</Button>
-                    <AsyncWrapper state={[this.props.results]}>
-                        <T
-                            headers={this.headers}
-                            rows={this.props.results.data}
-                            renderer={this.renderer}
-                        />
-                    </AsyncWrapper>
+                    <P
+                        headers={this.headers}
+                        data={this.props.results}
+                        renderer={this.renderer}
+                        request={this.props.getResults}
+                    />
                 </Col>
             </Row>
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
                 <ModalHeader toggle={this.toggle}>Фильтр результатов</ModalHeader>
                 <ModalBody>
-                    лд
+                    <Form>
+                        <FormGroup>
+                            <Label for="module">Название модуля</Label>
+                            <Input name="module" id="module" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="module">Название модуля</Label>
+                            <Input name="module" id="module" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="module">Название модуля</Label>
+                            <Input name="module" id="module" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="module">Название модуля</Label>
+                            <Input name="module" id="module" />
+                        </FormGroup>
+                    </Form>
                 </ModalBody>
                 <ModalFooter>
                     <Button color="primary" onClick={this.confirm}>Применить фильтр</Button>{' '}

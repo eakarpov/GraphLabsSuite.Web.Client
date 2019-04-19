@@ -1,5 +1,6 @@
 import Connector from "../lib/connector";
 import {Validation} from "fp-ts/lib/Validation";
+import {PageState} from "../app/containers/Page";
 
 export interface AssetManifest {
     'main.css': string;
@@ -40,14 +41,15 @@ class Api {
         return Connector.fetch(`odata/currentUser`);
     }
 
-    public getResults(filter?: any) {
+    public getResults(state: PageState) {
         // $expand=student,variant($expand=taskModule)
-        let url = '$expand=student,variant($expand=taskModule)';
-        if (filter) {
-            Object.keys(filter).forEach((key: string) => {
-                url += ` and $filter=substringof('${key}', ${filter[key]}) eq true`;
+        let url = `$expand=student,variant($expand=taskModule)&$top=${state.limit}&$skip=${(state.page - 1)*state.limit}`;
+        if (Object.keys(state.filter).length > 0) {
+            Object.keys(state.filter).forEach((key: string) => {
+                url += ` and $filter=substringof('${key}', ${state.filter[key]}) eq true`;
             });
         }
+        url += '&$count=true';
         return Connector.get('odata/taskVariantLogs?' + url);
     }
 

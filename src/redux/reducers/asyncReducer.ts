@@ -12,9 +12,6 @@ export interface AsyncReducer<T> {
 export function getInitialObject<T>() {
     const defaultData =  {
             data: {} as T,
-            total: 0,
-            skip: 0,
-            limit: 0,
         };
 
     return {
