@@ -64,7 +64,7 @@ class Modules extends Component<Props> {
                         />
                     </AsyncWrapper>
                 </Col>
-            </Row>
+            </Row>in
         </Container>);
     }
 

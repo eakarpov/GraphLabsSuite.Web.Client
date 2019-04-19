@@ -13,7 +13,7 @@ export type AuthProps = DispatchProps & RouteComponentProps<{}>;
 
 class AuthWrapper extends Component<AuthProps> {
     public componentDidMount() {
-        // this.props.getMe();
+        this.props.getMe();
     }
     public render(): ReactNode {
         return (<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>

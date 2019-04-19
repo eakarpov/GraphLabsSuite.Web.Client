@@ -16,6 +16,7 @@ export const results = {
                         dispatch(actions['getTaskVariantLogsAsyncSuccess']({
                             data: data.value,
                             total: data["@odata.count"],
+                            limit: state.limit,
                             skip: state.skip,
                         }));
                     } else {

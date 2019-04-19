@@ -27,16 +27,30 @@ interface StateToProps {
     state: AppState;
 }
 
+interface ResultFilter {
+    variant: string;
+    module: string;
+    student?: string;
+    action: string;
+}
+
 type Props = DispatchProps & StateToProps & InjectedAuthRouterProps;
 
 interface State {
     modal: boolean;
+    filter: Partial<ResultFilter>,
 }
 
 class Results extends Component<Props, State> {
     public state = {
       modal: false,
+      filter: {}
     };
+
+    public variant!: HTMLInputElement;
+    public module!: HTMLInputElement;
+    public student!: HTMLInputElement;
+    public action!: HTMLInputElement;
 
     public constructor(props: Props) {
         super(props);
@@ -44,6 +58,10 @@ class Results extends Component<Props, State> {
         this.confirm = this.confirm.bind(this);
         this.decline = this.decline.bind(this);
         this.renderer = this.renderer.bind(this);
+        this.setStudent = this.setStudent.bind(this);
+        this.setAction = this.setAction.bind(this);
+        this.setModule = this.setModule.bind(this);
+        this.setVariant = this.setVariant.bind(this);
     }
 
     public get admin(): boolean {
@@ -74,6 +92,7 @@ class Results extends Component<Props, State> {
                         data={this.props.results}
                         renderer={this.renderer}
                         request={this.props.getResults}
+                        filter={this.state.filter}
                     />
                 </Col>
             </Row>
@@ -82,21 +101,21 @@ class Results extends Component<Props, State> {
                 <ModalBody>
                     <Form>
                         <FormGroup>
-                            <Label for="module">Название модуля</Label>
-                            <Input name="module" id="module" />
+                            <Label for="action">Действие</Label>
+                            <Input innerRef={this.setAction} name="action" id="action" />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="variant">Вариант</Label>
+                            <Input innerRef={this.setVariant} name="variant" id="variant" />
                         </FormGroup>
                         <FormGroup>
                             <Label for="module">Название модуля</Label>
-                            <Input name="module" id="module" />
+                            <Input innerRef={this.setModule} name="module" id="module" />
                         </FormGroup>
-                        <FormGroup>
-                            <Label for="module">Название модуля</Label>
-                            <Input name="module" id="module" />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="module">Название модуля</Label>
-                            <Input name="module" id="module" />
-                        </FormGroup>
+                        {this.admin && <FormGroup>
+                            <Label for="student">E-mail студента</Label>
+                            <Input innerRef={this.setStudent} name="student" id="student" />
+                        </FormGroup>}
                     </Form>
                 </ModalBody>
                 <ModalFooter>
@@ -114,6 +133,14 @@ class Results extends Component<Props, State> {
     }
 
     private confirm() {
+        this.setState({
+          filter: {
+              variant: this.variant.value,
+              student: this.student && this.student.value,
+              module: this.module.value,
+              action: this.action.value,
+          },
+        });
         this.toggle();
     }
 
@@ -135,6 +162,22 @@ class Results extends Component<Props, State> {
                 {this.admin && <td>{row.student.email}</td>}
             </React.Fragment>
         );
+    }
+
+    private setVariant(i: HTMLInputElement) {
+        this.variant = i;
+    }
+
+    private setStudent(i: HTMLInputElement) {
+        this.student = i;
+    }
+
+    private setAction(i: HTMLInputElement) {
+        this.action = i;
+    }
+
+    private setModule(i: HTMLInputElement) {
+        this.module = i;
     }
 }
 

@@ -7,12 +7,14 @@ import GTable from "../Table";
 import {IPageableState} from "../../../types/redux";
 import Button from "reactstrap/lib/Button";
 import AsyncWrapper from "../AsyncWrapper";
+import {Util} from "../../../lib/util";
 
 export interface PageProps<T> {
     headers: string[];
     data: IPageableState<T>;
     renderer: SFC<any>;
     request: (...params: any[]) => void;
+    filter: any;
 }
 
 export interface PageState {
@@ -45,6 +47,13 @@ export default class Page<T extends { id: number }> extends Component<PageProps<
                 page: Math.floor(this.props.data.skip / this.props.data.limit) + 1,
                 total: this.props.data.total,
             })
+        }
+        if (prevProps.filter !== this.props.filter) {
+            this.setState({
+               filter: Util.clean(this.props.filter),
+            }, () => {
+                this.props.request(this.state);
+            });
         }
     }
 

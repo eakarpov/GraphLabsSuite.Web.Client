@@ -45,9 +45,12 @@ class Api {
         // $expand=student,variant($expand=taskModule)
         let url = `$expand=student,variant($expand=taskModule)&$top=${state.limit}&$skip=${(state.page - 1)*state.limit}`;
         if (Object.keys(state.filter).length > 0) {
+            url += `&$filter=`;
+            const arr: string[] = [];
             Object.keys(state.filter).forEach((key: string) => {
-                url += ` and $filter=substringof('${key}', ${state.filter[key]}) eq true`;
+               arr.push(`substringof(${state.filter[key]},'${key}') eq true`);
             });
+            url += arr.join(' and ');
         }
         url += '&$count=true';
         return Connector.get('odata/taskVariantLogs?' + url);
