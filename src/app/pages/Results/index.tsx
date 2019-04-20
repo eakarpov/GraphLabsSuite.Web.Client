@@ -80,6 +80,13 @@ class Results extends Component<Props, State> {
     }
 
     public render() {
+        const mapper: any = {};
+        mapper['ID'] = 'id';
+        mapper['Действие'] = 'action';
+        mapper['Вариант'] = 'variantId';
+        mapper['Студент'] = 'studentId';
+        mapper['Модуль'] = 'variant.taskModule.id';
+        mapper['Время'] = 'dateTime';
         return (<Container>
             <Row>
                 <Col md={12}>
@@ -93,6 +100,7 @@ class Results extends Component<Props, State> {
                         renderer={this.renderer}
                         request={this.props.getResults}
                         filter={this.state.filter}
+                        mapper={mapper}
                     />
                 </Col>
             </Row>

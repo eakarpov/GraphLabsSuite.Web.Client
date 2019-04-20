@@ -15,6 +15,7 @@ export interface PageProps<T> {
     renderer: SFC<any>;
     request: (...params: any[]) => void;
     filter: any;
+    mapper: { [index: string]: string};
 }
 
 export interface PageState {
@@ -23,6 +24,7 @@ export interface PageState {
     limit: number;
     total: number;
     filter: object;
+    sort: { header: string; asc: boolean; query?: string; };
 }
 
 export default class Page<T extends { id: number }> extends Component<PageProps<T>, PageState> {
@@ -32,12 +34,14 @@ export default class Page<T extends { id: number }> extends Component<PageProps<
         total: 0,
         skip: 0,
         filter: {},
+        sort: { header: '', asc: true },
     };
 
     constructor(props: PageProps<T>) {
         super(props);
         this.paginate = this.paginate.bind(this);
         this.isDisabled = this.isDisabled.bind(this);
+        this.onHeaderClick = this.onHeaderClick.bind(this);
     }
 
 
@@ -71,6 +75,8 @@ export default class Page<T extends { id: number }> extends Component<PageProps<
                         headers={this.props.headers}
                         rows={this.props.data.data}
                         renderer={this.props.renderer}
+                        sorted={this.state.sort}
+                        onHeaderClick={this.onHeaderClick}
                     />
                 </AsyncWrapper>
                 <Pagination aria-label="Навигация">
@@ -123,5 +129,17 @@ export default class Page<T extends { id: number }> extends Component<PageProps<
                   break;
           }
         };
+    }
+
+    private onHeaderClick(name: string) {
+        this.setState({
+            sort: {
+                asc: this.state.sort.header === name ? !this.state.sort.asc : true,
+                header: name,
+                query: this.props.mapper[name],
+            },
+        }, () => {
+            this.props.request(this.state);
+        })
     }
 }

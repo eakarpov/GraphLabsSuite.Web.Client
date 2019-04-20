@@ -52,6 +52,9 @@ class Api {
             });
             url += arr.join(' and ');
         }
+        if (state.sort.header) {
+            url += `&$orderby=${state.sort.query} ${state.sort.asc ? 'asc' : 'desc'}`;
+        }
         url += '&$count=true';
         return Connector.get('odata/taskVariantLogs?' + url);
     }

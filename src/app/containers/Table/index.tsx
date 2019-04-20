@@ -7,6 +7,8 @@ interface Props<T> {
   headers: string[];
   renderer: SFC<any>;
   onRowClick?: (id: number) => void;
+  onHeaderClick?: (name: string) => void;
+  sorted?: { asc: boolean; header: string; };
 }
 
 class GTable<T extends { id: number }> extends Component<Props<T>> {
@@ -19,6 +21,7 @@ class GTable<T extends { id: number }> extends Component<Props<T>> {
   constructor(props: Props<T>) {
     super(props);
     this.onRowClick = this.onRowClick.bind(this);
+    this.onHeaderClick = this.onHeaderClick.bind(this);
   }
   public render() {
     return (
@@ -26,7 +29,16 @@ class GTable<T extends { id: number }> extends Component<Props<T>> {
             <thead>
             <tr>
                 {this.props.headers.map((e: string, index: number) => (
-                    <th key={index}>{e}</th>
+                    <th
+                        key={index}
+                        onClick={this.onHeaderClick(e)}
+                        style={this.props.onHeaderClick && { cursor: 'pointer' }}
+                    >
+                        {e} {
+                            this.props.sorted
+                            && (this.props.sorted.header === e)
+                            && (this.props.sorted.asc ? '(asc)' : '(desc)')}
+                    </th>
                 ))}
             </tr>
             </thead>
@@ -46,6 +58,12 @@ class GTable<T extends { id: number }> extends Component<Props<T>> {
     return (e: SyntheticEvent<HTMLTableRowElement>) => {
         this.props.onRowClick && this.props.onRowClick(id);
     }
+  }
+
+  private onHeaderClick(name: string) {
+      return () => {
+          this.props.onHeaderClick && this.props.onHeaderClick(name);
+      }
   }
 }
 
