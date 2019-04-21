@@ -32,6 +32,9 @@ export default class Connector {
                     Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
                 },
             });
+            if (res.status === 401) {
+                return failure(res.status.toString());
+            }
             return success<string, string>(await res.text());
         } catch(e) {
             return failure(e);

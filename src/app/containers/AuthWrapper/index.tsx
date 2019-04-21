@@ -6,14 +6,14 @@ import {actions} from '../../../redux/actions';
 import {RouteComponentProps, withRouter} from "react-router";
 
 export interface DispatchProps {
-    getMe: () => void;
+    getMeAsync: () => void;
 }
 
 export type AuthProps = DispatchProps & RouteComponentProps<{}>;
 
 class AuthWrapper extends Component<AuthProps> {
     public componentDidMount() {
-        this.props.getMe();
+        this.props.getMeAsync();
     }
     public render(): ReactNode {
         return (<div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -26,7 +26,7 @@ class AuthWrapper extends Component<AuthProps> {
 const mapStateToProps = (state: RootState) => ({});
 
 const mapDispatchToProps = {
-    getMe: actions.getMe,
+    getMeAsync: actions.getMeAsync,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AuthWrapper));

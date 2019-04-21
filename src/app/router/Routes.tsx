@@ -13,7 +13,7 @@ import Upload from '../pages/Upload';
 
 const userIsAuthenticated = connectedRouterRedirect({
     // The url to redirect user to if they fail
-    redirectPath: '/login',
+    redirectPath: '/auth',
     // If selector is true, wrapper will not redirect
     // For example let's check that state contains user data
     authenticatedSelector: (state: RootState) => state.state.logged,
