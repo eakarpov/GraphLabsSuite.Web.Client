@@ -48,7 +48,7 @@ class Api {
             url += `&$filter=`;
             const arr: string[] = [];
             Object.keys(state.filter).forEach((key: string) => {
-               arr.push(`substringof(${state.filter[key]},'${key}') eq true`);
+               arr.push(`contains('${key}','${state.filter[key]}') eq true`);
             });
             url += arr.join(' and ');
         }
