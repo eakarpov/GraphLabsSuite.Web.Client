@@ -85,7 +85,7 @@ class Results extends Component<Props, State> {
         mapper['Действие'] = 'action';
         mapper['Вариант'] = 'variantId';
         mapper['Студент'] = 'studentId';
-        mapper['Модуль'] = 'variant.taskModule.id';
+        mapper['Модуль'] = 'variant/taskModule/id';
         mapper['Время'] = 'dateTime';
         return (<Container>
             <Row>
@@ -143,9 +143,9 @@ class Results extends Component<Props, State> {
     private confirm() {
         this.setState({
           filter: {
-              variant: this.variant.value,
-              student: this.student && this.student.value,
-              module: this.module.value,
+              'variant/name': this.variant.value,
+              'student/email': this.student && this.student.value,
+              'module/name': this.module.value,
               action: this.action.value,
           },
         });
