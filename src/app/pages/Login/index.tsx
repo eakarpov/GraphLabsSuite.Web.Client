@@ -28,6 +28,7 @@ class Login extends Component<Props, State> {
         this.login = this.login.bind(this);
         this.setEmail = this.setEmail.bind(this);
         this.setPassword = this.setPassword.bind(this);
+        this.checkSend = this.checkSend.bind(this);
     }
 
     public login() {
@@ -53,11 +54,23 @@ class Login extends Component<Props, State> {
               <Form>
                   <FormGroup>
                       <Label for="email">Email</Label>
-                      <Input innerRef={this.setEmail} type="email" name="email" id="email"/>
+                      <Input
+                          innerRef={this.setEmail}
+                          type="email"
+                          name="email"
+                          id="email"
+                          onKeyDown={this.checkSend}
+                      />
                   </FormGroup>
                   <FormGroup>
                       <Label for="password">Пароль</Label>
-                      <Input innerRef={this.setPassword} type="password" name="password" id="password"/>
+                      <Input
+                          innerRef={this.setPassword}
+                          type="password"
+                          name="password"
+                          id="password"
+                          onKeyDown={this.checkSend}
+                      />
                   </FormGroup>
                   {this.state.error && <p style={{ color: 'red'}}>{this.state.error}</p>}
                   <Button onClick={this.login}>Войти</Button>
@@ -72,6 +85,12 @@ class Login extends Component<Props, State> {
 
     private setEmail(i: HTMLInputElement) {
         this.email = i;
+    }
+
+    private checkSend(e: React.KeyboardEvent<HTMLInputElement>) {
+        if (e.keyCode === 13) {
+            this.login();
+        }
     }
 }
 export default connect(null, {
