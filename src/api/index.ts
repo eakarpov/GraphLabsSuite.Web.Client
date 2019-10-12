@@ -1,6 +1,7 @@
 import Connector from "../lib/connector";
 import {Validation} from "fp-ts/lib/Validation";
 import {PageState} from "../app/containers/Page";
+import {VariantsData} from "../redux/reducers/variants";
 
 export interface AssetManifest {
     'main.css': string;
@@ -27,6 +28,10 @@ class Api {
 
     public getModuleHtml(id: number, data: AssetManifest): Promise<Validation<string, string>> {
         return this.getModuleFile(id, 'index.html', data);
+    }
+
+    public getVariantList() {
+        return Connector.get<{value: VariantsData[]}>(`odata/taskVariants`);
     }
 
     public getVariant(id: number): Promise<Validation<string, string>> {

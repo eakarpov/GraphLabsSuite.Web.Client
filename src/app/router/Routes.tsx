@@ -8,6 +8,7 @@ import Results from "../pages/Results";
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
 import {RootState} from "../../redux/rootReducer";
 import Upload from '../pages/Upload';
+import Variants from "../pages/Variants";
 
 // tslint:disable
 
@@ -30,6 +31,7 @@ const Routes = () => (
             <Route path="/modules" component={userIsAuthenticated(Modules)}/>
             <Route path="/module/:moduleId" component={userIsAuthenticated(Module)}/>
             <Route path="/upload" component={userIsAuthenticated(Upload)} />
+            <Route path="/variants" component={userIsAuthenticated(Variants)} />
         </Switch>
     </div>
 );
