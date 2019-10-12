@@ -42,6 +42,12 @@ class Variants extends Component<Props> {
                                 <>
                                     <ListGroupItem tag={NavLink} to={`/variants/${e.id}`}>
                                         {e.name}
+                                        <Button color={"link"} style={{right: "40px", position: "absolute", top: "calc(50% - 19px)"}}>
+                                            &#9998;
+                                        </Button>
+                                        <Button color={"link"} style={{right: "15px", position: "absolute", top: "calc(50% - 19px)"}}>
+                                            🗙
+                                        </Button>
                                     </ListGroupItem>
                                     <Route path={`/variants/${e.id}`} component={VariantDetailed}/>
                                 </>
