@@ -18,12 +18,14 @@ class VariantDetailed extends Component<Props> {
             .find(e => e.id ===
                 parseInt(this.props.match.path.replace(/^.*\/variants\/([0-9]*?)(\/.*)?$/, "$1"), 10)
             );
-        if (!variant) {return null};
+        if (!variant) {return null}
         const variantData = variant.variantData;
         return (
-            <ListGroupItem tag={'div'}>
-                {variantData}
-            </ListGroupItem>);
+            <>
+            <ListGroupItem tag={'div'} style={{whiteSpace: 'pre'}}>
+                {JSON.stringify(JSON.parse(variantData), null, 2)}
+            </ListGroupItem>
+            </>)
     }
 }
 

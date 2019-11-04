@@ -3,6 +3,7 @@ import {Validation} from "fp-ts/lib/Validation";
 import {PageState} from "../app/containers/Page";
 import {VariantsData} from "../redux/reducers/variants";
 
+
 export interface AssetManifest {
     'main.css': string;
     'main.js': string;
