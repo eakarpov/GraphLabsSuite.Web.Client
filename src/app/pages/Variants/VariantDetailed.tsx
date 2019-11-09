@@ -13,6 +13,20 @@ interface Props extends RouteComponentProps<{}>, InjectedAuthRouterProps{
 }
 
 class VariantDetailed extends Component<Props> {
+
+    public JSONedit(json: string) {
+        json = JSON.stringify(JSON.parse(json), null, 2);
+        json = json.replace('[\n', '[').replace('\n]', ']');
+        json = json.replace('{\n', '{').replace('\n}', '}');
+        let fvIndex = json.indexOf('vertices')
+        let verticesPart = json.substring(fvIndex)
+        const svIndex = verticesPart.indexOf(']')+1+fvIndex
+        fvIndex = verticesPart.indexOf('[')+fvIndex
+        verticesPart = json.substring(fvIndex,svIndex).split('\n').join('').split(' ').join('').split(',').join(', ');
+        json = json.substr(0,fvIndex) + verticesPart + json.substr(svIndex)
+        return json
+    }
+
     public render() {
         const variant = this.props.variants.data
             .find(e => e.id ===
@@ -20,10 +34,9 @@ class VariantDetailed extends Component<Props> {
             );
         if (!variant) {return null}
         const variantData = variant.variantData;
-        return (
-            <>
-            <ListGroupItem tag={'div'} style={{whiteSpace: 'pre'}}>
-                {JSON.stringify(JSON.parse(variantData), null, 2)}
+        return (<>
+            <ListGroupItem tag={'div'} style={{whiteSpace: 'pre', fontSize: '0.8em'}} >
+                {this.JSONedit(JSON.stringify(JSON.parse(variantData)))}
             </ListGroupItem>
             </>)
     }

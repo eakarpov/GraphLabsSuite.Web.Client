@@ -1,3 +1,22 @@
-body {
-    background: red;
+.variant {
+    color: #5c7e94 !important;
+}
+
+.variant:hover {
+    background: #e8edef !important;
+    border-color: #5c7e94 !important;
+}
+
+.variant.active {
+    background-color: #e8edef !important;
+    border-color: #5c7e94 !important;
+}
+
+.pics {
+    color: #5c7e94 !important;
+}
+
+.pics:hover {
+    color: #3c4d56 !important;
+    text-decoration: none !important;
 }

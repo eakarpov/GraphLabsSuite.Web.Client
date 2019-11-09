@@ -11,9 +11,11 @@ import AsyncWrapper from "../../containers/AsyncWrapper";
 import {VariantsState} from "../../../redux/reducers/variants";
 import VariantDetailed from "./VariantDetailed";
 import './Variants.css';
+import {AppState} from "../../../redux/reducers/state";
 
 
 interface VariantsProps {
+    state: AppState,
     variants: VariantsState,
     getVariants: () => void
 }
@@ -28,6 +30,13 @@ class Variants extends Component<Props> {
         }
     }
 
+    public get admin(): boolean {
+        if (this.props.state.userData) {
+            return this.props.state.userData.role === 'Teacher';
+        }
+        return false;
+    }
+
     public render(): ReactNode {
         return (<Container>
             <Row>
@@ -36,18 +45,16 @@ class Variants extends Component<Props> {
                         Варианты
                     </h1>
                     <AsyncWrapper state={[this.props.variants]}>
+                        {this.admin && <Button tag={Link} to="/variants/edit" outline color="secondary">Загрузить новый</Button>}
                         <ListGroup>
-                            <ListGroupItem tag={Button} outline color={'secondary'}>
-                                <Link to={`/variants/edit`}> Добавить новый вариант </Link>
-                            </ListGroupItem>
                             {this.props.variants.data.sort((e1,e2) => e1.id-e2.id).map(e => (
                                 <>
-                                    <ListGroupItem tag={NavLink} to={location.pathname === `/variants/${e.id}` ? "/variants" : `/variants/${e.id}`}>
+                                    <ListGroupItem className={"variant"} tag={NavLink} to={location.pathname === `/variants/${e.id}` ? "/variants" : `/variants/${e.id}`}>
                                         {e.name}
-                                        <Link to={`/variants/${e.id}/edit`} style={{right: "40px", position: "absolute", top: "calc(50% - 19px)"}}>
+                                        <Link className={"pics"} to={`/variants/${e.id}/edit`} style={{right: "40px", position: "absolute", top: "calc(50% - 19px)"}}>
                                             &#9998;
                                         </Link>
-                                        <Link to={"link"} style={{right: "15px", position: "absolute", top: "calc(50% - 19px)"}}>
+                                        <Link className={"pics"} to={"link"} style={{right: "15px", position: "absolute", top: "calc(50% - 19px)"}}>
                                             🗙
                                         </Link>
                                     </ListGroupItem>
@@ -64,12 +71,12 @@ class Variants extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    variants: state.variants
+    variants: state.variants,
+    state: state.state
 });
 
 const mapDispatchToProps = {
-    getVariants: actions.getVariants,
-    getModules: actions.getModules
+    getVariants: actions.getVariants
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Variants));
