@@ -18,23 +18,28 @@ interface VariantsProps {
 }
 
 interface State {
-    value: string
+    vertexAmount: number,
+    edgesAmount: number,
+    value: string,
+    options: string[]
 }
 
 type Props = VariantsProps & RouteComponentProps<{}> & InjectedAuthRouterProps
 
 class VariantEditor extends Component<Props, State> {
 
-    private ref1: React.RefObject<Input>;
-
     constructor(props: Props) {
         super(props);
         this.state = {
-            value: "Здесь еще ничего нет"
+            vertexAmount: 5,
+            edgesAmount: 6,
+            value: "Здесь еще ничего нет",
+            options: ["граф", "ориентированный граф", "матрица"]
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
-        this.ref1 = React.createRef();
+        this.updateVertex = this.updateVertex.bind(this)
+        this.updateEdge = this.updateEdge.bind(this)
     }
 
     public componentDidMount() {
@@ -59,26 +64,47 @@ class VariantEditor extends Component<Props, State> {
                 value={this.state.value}
                 onChange={this.handleChange}
                 name="UNIQUE_ID_OF_DIV"
+                width={"70%"}
             />
-            <Input ref={this.ref1}>Количество вершин</Input>
-            <Input>Количество ребер</Input>
+            <a>Количество вершин</a>
+            <Input width={"50%"} type={"number"} defaultValue="5" onChange={this.updateVertex}>Количество вершин</Input>
+            <a>Количество ребер</a>
+            <Input width={"50%"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество ребер</Input>
             <Button onClick={this.handleButtonClick}>Генерировать структуру графа</Button>
         </>
     }
 
     private handleButtonClick() {
-        window['console'].log(this.ref1.current);
+        window['console'].log(this.state)
+        let vertices = "";
+        let edges;
+        this.state.edgesAmount>0 ? edges = "{ \"source\": , \"target\": }," : edges = "";
+        for (let i = 1; i < this.state.vertexAmount; i++) {
+            vertices = vertices + '\"' + i.toString() + '\", '
+        }
+        for (let i = 1; i < this.state.edgesAmount; i++) {
+            edges = edges + "\n         { \"source\": , \"target\": },"
+        }
+        vertices = vertices + '\"' + this.state.vertexAmount + '\", '
         const graphStructure = "[{ \"type\": \"graph\", \"value\": \n" +
-            "   { \"vertices\": [ ], \n" +
+            "   { \"vertices\": [" + vertices + "], \n" +
             "   \"edges\": \n" +
-            "       [ { \"source\": , \"target\": },\n" +
-            "         { \"source\": , \"target\": },\n" +
-            "         { \"source\": , \"target\": },\n" +
-            "         { \"source\": , \"target\": }, \n" +
-            "         { \"source\": , \"target\": } ] \n" +
+            "       [ " + edges + " ] \n" +
             "   } \n" +
-            "} ] \n";
+            "} ] \n"
         this.handleChange(graphStructure);
+    }
+
+    private updateVertex(event: any) {
+        this.setState({
+            vertexAmount : event.target.value
+        })
+    }
+
+    private updateEdge(event: any) {
+        this.setState({
+            edgesAmount : event.target.value
+        })
     }
 
     private handleChange(value: string) {
@@ -95,8 +121,7 @@ const mapStateToProps = (state: RootState, props: any) => {
 };
 
 const mapDispatchToProps = {
-    getVariants: actions.getVariants,
-    getModules: actions.getModules
+    getVariants: actions.getVariants
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(VariantEditor));
