@@ -45,7 +45,7 @@ class Variants extends Component<Props> {
                         Варианты
                     </h1>
                     <AsyncWrapper state={[this.props.variants]}>
-                        {this.admin && <Button tag={Link} to="/variants/edit" outline color="secondary">Загрузить новый</Button>}
+                        {this.admin && <Button tag={Link} to="/variants/edit" outline color="secondary">Создать новый</Button>}
                         <ListGroup>
                             {this.props.variants.data.sort((e1,e2) => e1.id-e2.id).map(e => (
                                 <>
