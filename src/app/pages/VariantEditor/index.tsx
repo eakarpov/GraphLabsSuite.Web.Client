@@ -1,6 +1,7 @@
-import {Component, ReactNode} from "react";
 import * as React from "react";
+import {Component, ReactNode} from "react";
 import AceEditor from "react-ace";
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-github";
 import {RouteComponentProps, withRouter} from "react-router";
@@ -19,7 +20,12 @@ import {
     DropdownMenu,
     DropdownToggle,
     Input,
-    Row
+    Nav,
+    NavItem,
+    NavLink,
+    Row,
+    TabContent,
+    TabPane
 } from "reactstrap";
 import './VariantEditor.css';
 
@@ -39,7 +45,8 @@ interface State {
         structButton: string
     },
     structToGenerate: string,
-    currentDropdownOption: string
+    currentDropdownOption: string,
+    tabIndex: string
 }
 
 type Props = VariantsProps & RouteComponentProps<{}> & InjectedAuthRouterProps
@@ -59,7 +66,8 @@ class VariantEditor extends Component<Props, State> {
                 label2: "Количество ребер",
                 structButton: "Генерировать структуру графа"
             },
-            structToGenerate: "graphV"
+            structToGenerate: "graphV",
+            tabIndex: "1"
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
@@ -67,6 +75,8 @@ class VariantEditor extends Component<Props, State> {
         this.updateEdge = this.updateEdge.bind(this);
         this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
         this.getOptionHandler = this.getOptionHandler.bind(this);
+        this.triggerTab = this.triggerTab.bind(this);
+        this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
     }
 
     public componentDidMount() {
@@ -84,21 +94,55 @@ class VariantEditor extends Component<Props, State> {
     }
 
     public render(): ReactNode {
-        return <Container style={{marginTop: "50px"}}>
+        return <Container fluid style={{marginTop: "50px"}}>
             <Row>
-                <Col xs={9}>
-                    <AceEditor
-                        mode="json"
-                        theme="github"
-                        value={this.state.value}
-                        onChange={this.handleChange}
-                        name="UNIQUE_ID_OF_DIV"
-                        width={"100%"}
-                    />
+                <Col sm={{
+                    size: 5,
+                    offset: 1
+                }} >
+                    <Nav tabs>
+                        <NavItem>
+                            <NavLink
+                                active={this.state.tabIndex === '1'}
+                                onClick={this.triggerTab('1')}
+                            >
+                                JSON Editor
+                            </NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink
+                                active={this.state.tabIndex === '2'}
+                                onClick={this.triggerTab('2')}
+                            >
+                                Editor
+                            </NavLink>
+                        </NavItem>
+                    </Nav>
+                    <TabContent activeTab={this.state.tabIndex}>
+                        <TabPane tabId="1">
+                            <AceEditor
+                                mode="json"
+                                theme="github"
+                                value={this.state.value}
+                                onChange={this.handleChange}
+                                name="UNIQUE_ID_OF_DIV"
+                                width={"100%"}
+                                height={"55vh"}
+                            />
+                        </TabPane>
+                        <TabPane tabId="2">
+                            <div style={{width: "100%", height: "55vh", border: "1px solid #5c7e94"}}>
+                                <></>
+                            </div>
+                        </TabPane>
+                    </TabContent>
                 </Col>
-                <Col xs={3}>
-                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}>
-                        <DropdownToggle caret>
+                <Col sm={{
+                    size: 3,
+                    offset: 1
+                }}>
+                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle} style={{marginTop: "40px"}}>
+                        <DropdownToggle outline color="secondary" className={"generate"} caret>
                             {this.state.currentDropdownOption}
                         </DropdownToggle>
                         <DropdownMenu>
@@ -121,16 +165,32 @@ class VariantEditor extends Component<Props, State> {
                     </ButtonDropdown>
                     <div>
                         <a>{this.state.labels.label1}</a>
-                        <Input width={"50%"} type={"number"} defaultValue="5" onChange={this.updateVertex}>Количество
+                        <Input className={"generate"} type={"number"} defaultValue="5" onChange={this.updateVertex}>Количество
                             вершин</Input>
                         <a>{this.state.labels.label2}</a>
-                        <Input width={"50%"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
+                        <Input className={"generate"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
                             ребер</Input>
-                        <Button onClick={this.handleButtonClick}>{this.state.labels.structButton}</Button>
+                        <Button className={"generate"} onClick={this.handleButtonClick} outline color="secondary">{this.state.labels.structButton}</Button>
+                        <Button className={"generate"} disabled={(() => {
+                            try {
+                                JSON.parse(this.state.value);
+                                return false;
+                            } catch (e) {
+                                return true;
+                            }
+                        })()} onClick={this.handleAddButtonClick} outline color="secondary">Добавить еще одну структуру</Button>
                     </div>
                 </Col>
             </Row>
         </Container>
+    }
+
+    private triggerTab(id: string) {
+        return (() => {
+            this.setState({
+                tabIndex: id
+            })
+        });
     }
 
     private getOptionHandler(labels: State['labels'], structToGenerate: State['structToGenerate'], currentDropdownOption: string) {
@@ -143,6 +203,10 @@ class VariantEditor extends Component<Props, State> {
         })
     }
 
+    private handleAddButtonClick() {
+        this.handleChange(this.state.value.replace(/]$/, `,\n${this.getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`))
+    }
+
     private handleDropdownToggle() {
         this.setState({
             isDropdownOpen: !this.state.isDropdownOpen
@@ -150,58 +214,54 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        window['console'].log(this.state)
-        switch(this.state.structToGenerate) {
+        this.handleChange(`[${this.getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`);
+    }
+
+    private getJSON(structToGenerate: string, vertexAmount: number, edgesAmount: number) {
+        switch(structToGenerate) {
             case "graphV": {
                 let vertices = "";
                 let edges;
-                this.state.edgesAmount > 0 ? edges = "{ \"source\": , \"target\": }," : edges = "";
-                for (let i = 1; i < this.state.vertexAmount; i++) {
+                edgesAmount > 0 ? edges = "{ \"source\": , \"target\": }," : edges = "";
+                for (let i = 1; i < vertexAmount; i++) {
                     vertices = vertices + '\"' + i.toString() + '\", '
                 }
-                for (let i = 1; i < this.state.edgesAmount; i++) {
+                for (let i = 1; i < edgesAmount; i++) {
                     edges = edges + "\n         { \"source\": , \"target\": },"
                 }
-                vertices = vertices + '\"' + this.state.vertexAmount + '\", '
-                const graphStructure = "[{ \"type\": \"graph\", \"value\": \n" +
+                vertices = vertices + '\"' + vertexAmount + '\", '
+                return "{ \"type\": \"graph\", \"value\": \n" +
                     "   { \"vertices\": [" + vertices + "], \n" +
                     "   \"edges\": \n" +
                     "       [ " + edges + " ] \n" +
                     "   } \n" +
-                    "} ] \n"
-                this.handleChange(graphStructure);
-                break;
+                    "}";
             }
             case "graphVE": {
                 let vertices = "";
                 let edges;
-                this.state.edgesAmount > 0 ? edges = "{ \"name\": 1, \"source\": , \"target\": }," : edges = "";
-                for (let i = 1; i < this.state.vertexAmount; i++) {
+                edgesAmount > 0 ? edges = "{ \"name\": 1, \"source\": , \"target\": }," : edges = "";
+                for (let i = 1; i < vertexAmount; i++) {
                     vertices = vertices + '\"' + i.toString() + '\", '
                 }
-                for (let i = 1; i < this.state.edgesAmount; i++) {
+                for (let i = 1; i < edgesAmount; i++) {
                     edges = edges + "\n         { \"name\": " + (i+1).toString() + ", \"source\": , \"target\": },"
                 }
-                vertices = vertices + '\"' + this.state.vertexAmount + '\", '
-                const graphStructure = "[{ \"type\": \"graph\", \"value\": \n" +
+                vertices = vertices + '\"' + vertexAmount + '\", ';
+                return "{ \"type\": \"graph\", \"value\": \n" +
                     "   { \"vertices\": [" + vertices + "], \n" +
                     "   \"edges\": \n" +
                     "       [ " + edges + " ] \n" +
                     "   } \n" +
-                    "} ] \n"
-                this.handleChange(graphStructure);
-                break;
+                    "}";
             }
             case "matrix": {
-                this.handleChange("matrix")
-                break;
+                return "matrix";
             }
             default: {
-                this.handleChange("Здесь еще ничего нет")
-                break;
+                return "Здесь еще ничего нет";
             }
         }
-
     }
 
     private updateVertex(event: any) {
