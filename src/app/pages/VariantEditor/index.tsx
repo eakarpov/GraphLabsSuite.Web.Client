@@ -53,22 +53,23 @@ type Props = VariantsProps & RouteComponentProps<{}> & InjectedAuthRouterProps
 
 class VariantEditor extends Component<Props, State> {
 
+    public state = {
+        isDropdownOpen: false,
+        currentDropdownOption: "Граф с обозначением вершин",
+        vertexAmount: 5,
+        edgesAmount: 6,
+        value: "Здесь еще ничего нет",
+        labels: {
+            label1: "Количество вершин",
+            label2: "Количество ребер",
+            structButton: "Генерировать структуру графа"
+        },
+        structToGenerate: "graphV",
+        tabIndex: "1"
+    };
+
     constructor(props: Props) {
         super(props);
-        this.state = {
-            isDropdownOpen: false,
-            currentDropdownOption: "Граф с обозначением вершин",
-            vertexAmount: 5,
-            edgesAmount: 6,
-            value: "Здесь еще ничего нет",
-            labels: {
-                label1: "Количество вершин",
-                label2: "Количество ребер",
-                structButton: "Генерировать структуру графа"
-            },
-            structToGenerate: "graphV",
-            tabIndex: "1"
-        };
         this.handleChange = this.handleChange.bind(this);
         this.handleButtonClick = this.handleButtonClick.bind(this);
         this.updateVertex = this.updateVertex.bind(this);
@@ -99,7 +100,7 @@ class VariantEditor extends Component<Props, State> {
                 <Col sm={{
                     size: 5,
                     offset: 1
-                }} >
+                }}>
                     <Nav tabs>
                         <NavItem>
                             <NavLink
@@ -141,7 +142,8 @@ class VariantEditor extends Component<Props, State> {
                     size: 3,
                     offset: 1
                 }}>
-                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle} style={{marginTop: "40px"}}>
+                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}
+                                    style={{marginTop: "40px"}}>
                         <DropdownToggle outline color="secondary" className={"generate"} caret>
                             {this.state.currentDropdownOption}
                         </DropdownToggle>
@@ -150,12 +152,13 @@ class VariantEditor extends Component<Props, State> {
                                 label1: "Количество вершин",
                                 label2: "Количество ребер",
                                 structButton: "Генерировать структуру графа"
-                            }, "graphV", "Граф с обозначением вершин") }>Граф с обозначением вершин</DropdownItem>
+                            }, "graphV", "Граф с обозначением вершин")}>Граф с обозначением вершин</DropdownItem>
                             <DropdownItem onClick={this.getOptionHandler({
                                 label1: "Количество вершин",
                                 label2: "Количество ребер",
                                 structButton: "Генерировать структуру графа"
-                            }, "graphVE", "Граф с обозначением и вершин, и ребер")}>Граф с обозначением и вершин, и ребер</DropdownItem>
+                            }, "graphVE", "Граф с обозначением и вершин, и ребер")}>Граф с обозначением и вершин, и
+                                ребер</DropdownItem>
                             <DropdownItem onClick={this.getOptionHandler({
                                 label1: "Количество строк",
                                 label2: "Количество столбцов",
@@ -170,7 +173,8 @@ class VariantEditor extends Component<Props, State> {
                         <a>{this.state.labels.label2}</a>
                         <Input className={"generate"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
                             ребер</Input>
-                        <Button className={"generate"} onClick={this.handleButtonClick} outline color="secondary">{this.state.labels.structButton}</Button>
+                        <Button className={"generate"} onClick={this.handleButtonClick} outline
+                                color="secondary">{this.state.labels.structButton}</Button>
                         <Button className={"generate"} disabled={(() => {
                             try {
                                 JSON.parse(this.state.value);
@@ -178,7 +182,8 @@ class VariantEditor extends Component<Props, State> {
                             } catch (e) {
                                 return true;
                             }
-                        })()} onClick={this.handleAddButtonClick} outline color="secondary">Добавить еще одну структуру</Button>
+                        })()} onClick={this.handleAddButtonClick} outline color="secondary">Добавить еще одну
+                            структуру</Button>
                     </div>
                 </Col>
             </Row>
@@ -218,7 +223,7 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private getJSON(structToGenerate: string, vertexAmount: number, edgesAmount: number) {
-        switch(structToGenerate) {
+        switch (structToGenerate) {
             case "graphV": {
                 let vertices = "";
                 let edges;
@@ -245,7 +250,7 @@ class VariantEditor extends Component<Props, State> {
                     vertices = vertices + '\"' + i.toString() + '\", '
                 }
                 for (let i = 1; i < edgesAmount; i++) {
-                    edges = edges + "\n         { \"name\": " + (i+1).toString() + ", \"source\": , \"target\": },"
+                    edges = edges + "\n         { \"name\": " + (i + 1).toString() + ", \"source\": , \"target\": },"
                 }
                 vertices = vertices + '\"' + vertexAmount + '\", ';
                 return "{ \"type\": \"graph\", \"value\": \n" +

@@ -47,7 +47,7 @@ class Variants extends Component<Props> {
                     <AsyncWrapper state={[this.props.variants]}>
                         {this.admin && <Button tag={Link} to="/variants/edit" outline color="secondary">Создать новый</Button>}
                         <ListGroup>
-                            {this.props.variants.data.sort((e1,e2) => e1.id-e2.id).map(e => (
+                            {this.props.variants.data.map(e => (
                                 <>
                                     <ListGroupItem className={"variant"} tag={NavLink} to={location.pathname === `/variants/${e.id}` ? "/variants" : `/variants/${e.id}`}>
                                         {e.name}
@@ -71,7 +71,10 @@ class Variants extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => ({
-    variants: state.variants,
+    variants: {
+        ...state.variants,
+        data: state.variants.data.sort((e1,e2) => e1.id-e2.id)
+    },
     state: state.state
 });
 
