@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import App from './app/App';
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import registerServiceWorker from './registerServiceWorker';
 import {init} from "./lib/connector";
 import {Promise} from 'bluebird';
