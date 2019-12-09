@@ -60,6 +60,10 @@ type Props = VariantsProps & RouteComponentProps<{id: string}> & InjectedAuthRou
 
 class VariantEditor extends Component<Props, State> {
 
+    public static defaultProps: Partial<Props> = {
+        variant: {} as VariantData
+    };
+
     public state = {
         isDropdownOpen: false,
         isDropdownOpen2: false,
@@ -101,7 +105,7 @@ class VariantEditor extends Component<Props, State> {
 
     public componentDidUpdate(prevProps: Props, prevState: State) {
         if (this.props.variant) {
-            if ((prevProps.variant || {} as any).variantData !== this.props.variant.variantData) {
+            if ((prevProps.variant).variantData !== this.props.variant.variantData) {
                 this.setState({
                     value: this.props.variant.variantData,
                     name: this.props.variant.name
