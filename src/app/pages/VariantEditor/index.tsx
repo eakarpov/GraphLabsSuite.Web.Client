@@ -203,14 +203,8 @@ class VariantEditor extends Component<Props, State> {
                             ребер</Input>
                         <Button className={"generate"} onClick={this.handleButtonClick} outline
                                 color="secondary">{this.state.labels.structButton}</Button>
-                        <Button className={"generate"} disabled={(() => {
-                            try {
-                                JSON.parse(this.state.value);
-                                return false;
-                            } catch (e) {
-                                return true;
-                            }
-                        })()} onClick={this.handleAddButtonClick} outline color="secondary">
+                        <Button className={"generate"} disabled={this.isJSONCorrect()}
+                            onClick={this.handleAddButtonClick} outline color="secondary">
                             Добавить еще одну структуру
                         </Button>
                         <p>Выберите задание</p>
@@ -231,7 +225,7 @@ class VariantEditor extends Component<Props, State> {
                         </ButtonDropdown>
                         <p>Введите имя варианта</p>
                         <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
-                        <Button className={"generate"} onClick={this.handleButtonClick2} outline
+                        <Button className={"generate"} onClick={this.handleButtonClick2} disabled={this.isJSONCorrect()} outline
                                 color="secondary">Сохранить</Button>
                     </div>
                 </Col>
@@ -370,6 +364,15 @@ class VariantEditor extends Component<Props, State> {
         this.setState({
             value
         })
+    }
+
+    private isJSONCorrect() {
+        try {
+            JSON.parse(this.state.value);
+            return false;
+        } catch (e) {
+            return true;
+        }
     }
 }
 
