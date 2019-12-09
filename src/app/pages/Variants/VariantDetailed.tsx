@@ -14,21 +14,13 @@ interface Props extends RouteComponentProps<{}>, InjectedAuthRouterProps{
 
 class VariantDetailed extends Component<Props> {
 
-    private static JSONedit(json: string) {
-        json = JSON.stringify(JSON.parse(json), null, 2);
-        json = json.replace(/\[\n/gm, '[').replace(/\n]/gm, ']');
-        json = json.replace(/},\s*{/gm, "}, {").replace(/\[ *{/gm, "[ {");
-        json = json.replace(/}\s*]/gm, "} ]").replace(/ *} ]$/g, "} ]");
-        return json
-    }
-
     public render() {
         const variant = this.props.variant;
         if (!variant) {return null}
         const variantData = variant.variantData;
         return (<>
             <ListGroupItem tag={'div'} style={{whiteSpace: 'pre', fontSize: '0.8em'}} >
-                {VariantDetailed.JSONedit(variantData)}
+                {JSON.stringify(JSON.parse(variantData), null, 2)}
             </ListGroupItem>
             </>)
     }

@@ -158,10 +158,8 @@ class Variants extends Component<Props, State> {
             this.setState({
                 filter: id
             })
-
         }
     }
-
 }
 
 const mapStateToProps = (state: RootState) => ({

@@ -264,7 +264,6 @@ class VariantEditor extends Component<Props, State> {
             this.setState({
                 moduleId: id
             })
-
         }
     }
 
