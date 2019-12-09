@@ -134,6 +134,14 @@ class VariantEditor extends Component<Props, State> {
                                 Editor
                             </NavLink>
                         </NavItem>
+                        <NavItem>
+                            <NavLink
+                                active={this.state.tabIndex === '3'}
+                                onClick={this.triggerTab('3')}
+                            >
+                                Справка
+                            </NavLink>
+                        </NavItem>
                     </Nav>
                     <TabContent activeTab={this.state.tabIndex}>
                         <TabPane tabId="1">
@@ -150,6 +158,11 @@ class VariantEditor extends Component<Props, State> {
                         <TabPane tabId="2">
                             <div style={{width: "100%", height: "55vh", border: "1px solid #5c7e94"}}>
                                 <></>
+                            </div>
+                        </TabPane>
+                        <TabPane tabId="3">
+                            <div style={{width: "100%", height: "55vh", border: "1px solid #5c7e94"}}>
+                                <p>Здесь будет справка</p>
                             </div>
                         </TabPane>
                     </TabContent>
