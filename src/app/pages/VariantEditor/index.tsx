@@ -304,25 +304,37 @@ class VariantEditor extends Component<Props, State> {
                     `}`;
             }
             case "graphVE": {
-                let vertices = "";
-                let edges;
-                edgesAmount > 0 ? edges = "{ \"name\": 1, \"source\": , \"target\": }" : edges = "";
-                for (let i = 1; i < vertexAmount; i++) {
-                    vertices = vertices + '\"' + i.toString() + '\", '
-                }
-                for (let i = 1; i < edgesAmount; i++) {
-                    edges = edges + "\n         { \"name\": " + (i + 1).toString() + ", \"source\": , \"target\": },"
-                }
-                vertices = vertices + '\"' + vertexAmount + '\", ';
-                return "{ \"type\": \"graph\", \"value\": \n" +
-                    "   { \"vertices\": [" + vertices + "], \n" +
-                    "   \"edges\": \n" +
-                    "   [ " + edges + " ] \n" +
-                    "   } \n" +
-                    "}";
+                const vertices = Array.from(Array(vertexAmount).keys())
+                    .map(e => `"${e}"`)
+                    .join(",");
+                const edges = Array.from(Array(edgesAmount).keys())
+                    .map(e => `{ "name": "${e}", "sources": "sourceName" , "target": "targetName" }`)
+                    .join(",\n\t");
+                return `{ "type": "graph", "value": {\n` +
+                    `\t"vertices": [${vertices}], \n` +
+                    `\t"edges": \n` +
+                    `\t[${edges}] \n` +
+                    `   } \n` +
+                    `}`;
             }
             case "matrix": {
-                return "matrix";
+                const rows = Array.from(Array(vertexAmount).keys())
+                    .map(e => `"${e}"`)
+                    .join(",");
+                const cols = Array.from(Array(edgesAmount).keys())
+                    .map(e => `"${e}"`)
+                    .join(",");
+                const line = Array.from(Array(edgesAmount).keys())
+                    .map(e => `"${e}"`)
+                    .join(",");
+                const matrix = Array.from(Array(vertexAmount))
+                    .map(() => `{${line}}`)
+                    .join(",\n\t");
+                return `{ "type": "matrix", "value": {\n` +
+                    `\t"rows": [${rows}], \n` +
+                    `\t"columns": [${cols}], \n` +
+                    `\t"elements":\n\t [${matrix}] \n` +
+                    `}`;
             }
             default: {
                 return "Здесь еще ничего нет";
