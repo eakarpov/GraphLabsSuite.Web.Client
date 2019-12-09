@@ -28,17 +28,24 @@ import {
     TabPane
 } from "reactstrap";
 import './VariantEditor.css';
+import {ModuleData} from "../../../redux/reducers/modules";
 
 interface VariantsProps {
     variant: VariantData,
-    getVariants: () => void
+    getVariants: () => void,
+    modules: ModuleData[],
+    getModules: () => void,
+    saveVariant: typeof actions.saveVariant
 }
 
 interface State {
     vertexAmount: number,
     edgesAmount: number,
     value: string,
-    isDropdownOpen: boolean
+    moduleId: number,
+    name: string,
+    isDropdownOpen: boolean,
+    isDropdownOpen2: boolean,
     labels: {
         label1: string,
         label2: string,
@@ -49,12 +56,15 @@ interface State {
     tabIndex: string
 }
 
-type Props = VariantsProps & RouteComponentProps<{}> & InjectedAuthRouterProps
+type Props = VariantsProps & RouteComponentProps<{id: string}> & InjectedAuthRouterProps
 
 class VariantEditor extends Component<Props, State> {
 
     public state = {
         isDropdownOpen: false,
+        isDropdownOpen2: false,
+        moduleId: 1,
+        name: "",
         currentDropdownOption: "Граф с обозначением вершин",
         vertexAmount: 5,
         edgesAmount: 6,
@@ -78,17 +88,23 @@ class VariantEditor extends Component<Props, State> {
         this.getOptionHandler = this.getOptionHandler.bind(this);
         this.triggerTab = this.triggerTab.bind(this);
         this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
+        this.handleDropdownToggle2 = this.handleDropdownToggle2.bind(this);
+        this.handleDropdownClick = this.handleDropdownClick.bind(this);
+        this.handleButtonClick2 = this.handleButtonClick2.bind(this);
+        this.updateName = this.updateName.bind(this);
     }
 
     public componentDidMount() {
         this.props.getVariants();
+        this.props.getModules();
     }
 
     public componentDidUpdate(prevProps: Props, prevState: State) {
         if (this.props.variant) {
             if ((prevProps.variant || {} as any).variantData !== this.props.variant.variantData) {
                 this.setState({
-                    value: this.props.variant.variantData
+                    value: this.props.variant.variantData,
+                    name: this.props.variant.name
                 })
             }
         }
@@ -138,8 +154,7 @@ class VariantEditor extends Component<Props, State> {
                         </TabPane>
                     </TabContent>
                 </Col>
-                <Col sm={{
-                    size: 3,
+                <Col sm={{                    size: 3,
                     offset: 1
                 }}>
                     <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}
@@ -182,12 +197,62 @@ class VariantEditor extends Component<Props, State> {
                             } catch (e) {
                                 return true;
                             }
-                        })()} onClick={this.handleAddButtonClick} outline color="secondary">Добавить еще одну
-                            структуру</Button>
+                        })()} onClick={this.handleAddButtonClick} outline color="secondary">
+                            Добавить еще одну структуру
+                        </Button>
+                        <p>Выберите задание</p>
+                        <ButtonDropdown isOpen={this.state.isDropdownOpen2} toggle={this.handleDropdownToggle2}
+                                        outline color="secondary" style={{marginRight: "0"}}>
+                            <DropdownToggle outline color="secondary" className={"generate"} caret>
+                                {(this.props.modules.find(m => m.id === this.state.moduleId) || {name: ""}).name}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                {this.props.modules.map(m =>
+                                    <DropdownItem
+                                        key={m.id}
+                                        onClick={this.handleDropdownClick(m.id)}
+                                    >
+                                        {m.name}
+                                    </DropdownItem>)}
+                            </DropdownMenu>
+                        </ButtonDropdown>
+                        <p>Введите имя варианта</p>
+                        <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
+                        <Button className={"generate"} onClick={this.handleButtonClick2} outline
+                                color="secondary">Сохранить</Button>
                     </div>
                 </Col>
             </Row>
         </Container>
+    }
+
+    private updateName(event: any) {
+        this.setState({
+            name: event.target.value
+        })
+    }
+
+    private handleButtonClick2() {
+        this.props.saveVariant(this.state.value, this.state.name, this.state.moduleId.toString(), this.props.match.params.id);
+        if (!this.props.match.params.id) {
+            this.props.getVariants();
+            this.props.history.push("/variants");
+        }
+    }
+
+    private handleDropdownToggle2() {
+        this.setState({
+            isDropdownOpen2: !this.state.isDropdownOpen2
+        })
+    }
+
+    private handleDropdownClick(id: number) {
+        return () => {
+            this.setState({
+                moduleId: id
+            })
+
+        }
     }
 
     private triggerTab(id: string) {
@@ -225,27 +290,23 @@ class VariantEditor extends Component<Props, State> {
     private getJSON(structToGenerate: string, vertexAmount: number, edgesAmount: number) {
         switch (structToGenerate) {
             case "graphV": {
-                let vertices = "";
-                let edges;
-                edgesAmount > 0 ? edges = "{ \"source\": , \"target\": }," : edges = "";
-                for (let i = 1; i < vertexAmount; i++) {
-                    vertices = vertices + '\"' + i.toString() + '\", '
-                }
-                for (let i = 1; i < edgesAmount; i++) {
-                    edges = edges + "\n         { \"source\": , \"target\": },"
-                }
-                vertices = vertices + '\"' + vertexAmount + '\", '
-                return "{ \"type\": \"graph\", \"value\": \n" +
-                    "   { \"vertices\": [" + vertices + "], \n" +
-                    "   \"edges\": \n" +
-                    "       [ " + edges + " ] \n" +
-                    "   } \n" +
-                    "}";
+                const vertices = Array.from(Array(vertexAmount).keys())
+                    .map(e => `"${e}"`)
+                    .join(",");
+                const edges = Array.from(Array(edgesAmount))
+                    .map(() => `{ "sources": "sourceName" , "target": "targetName" }`)
+                    .join(",\n\t");
+                return `{ "type": "graph", "value": {\n` +
+                    `\t"vertices": [${vertices}], \n` +
+                    `\t"edges": \n` +
+                    `\t[${edges}] \n` +
+                    `   } \n` +
+                    `}`;
             }
             case "graphVE": {
                 let vertices = "";
                 let edges;
-                edgesAmount > 0 ? edges = "{ \"name\": 1, \"source\": , \"target\": }," : edges = "";
+                edgesAmount > 0 ? edges = "{ \"name\": 1, \"source\": , \"target\": }" : edges = "";
                 for (let i = 1; i < vertexAmount; i++) {
                     vertices = vertices + '\"' + i.toString() + '\", '
                 }
@@ -256,7 +317,7 @@ class VariantEditor extends Component<Props, State> {
                 return "{ \"type\": \"graph\", \"value\": \n" +
                     "   { \"vertices\": [" + vertices + "], \n" +
                     "   \"edges\": \n" +
-                    "       [ " + edges + " ] \n" +
+                    "   [ " + edges + " ] \n" +
                     "   } \n" +
                     "}";
             }
@@ -290,12 +351,15 @@ class VariantEditor extends Component<Props, State> {
 
 const mapStateToProps = (state: RootState, props: any) => {
     return {
-        variant: (state.variants.data || []).find(e => e.id === parseInt(props.match.params.id, 10))
+        variant: (state.variants.data || []).find(e => e.id === parseInt(props.match.params.id, 10)),
+        modules: state.modules.data
     };
 };
 
 const mapDispatchToProps = {
-    getVariants: actions.getVariants
+    getVariants: actions.getVariants,
+    getModules: actions.getModules,
+    saveVariant: actions.saveVariant
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(VariantEditor));

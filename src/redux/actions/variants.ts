@@ -4,14 +4,14 @@ import api from "../../api";
 
 
 export const variants = {
-    getVariants: () => {
+    getVariants: (moduleId?: number) => {
         return (dispatch: Dispatch) => {
             dispatch(actions['getVariantListAsyncStart']());
-            api.getVariantList()
+            api.getVariantList(moduleId)
                 .then((res) => {
                     const data = res.getOrElse({value: []});
                     if (data.value) {
-                        dispatch(actions['getVariantListAsyncSuccess']({ data: data.value }));
+                        dispatch(actions['getVariantListAsyncSuccess']({data: data.value}));
                     } else {
                         dispatch(actions['getVariantListAsyncFail']());
                     }
@@ -20,5 +20,22 @@ export const variants = {
                     dispatch(actions['getVariantListAsyncFail']());
                 });
         };
+    },
+    saveVariant: (data: any, name: string, moduleId: string, id?: string) => {
+        return (dispatch: Dispatch) => {
+            dispatch(actions['editVariantAsyncStart']());
+            api.saveVariant({
+                data,
+                meta: {
+                    name,
+                    moduleId,
+                    id
+                }
+            }).then(() => {
+                dispatch(actions['editVariantAsyncSuccess']());
+            }).catch(() => {
+                dispatch(actions['editVariantAsyncFail']());
+            });
+        }
     }
 };

@@ -19,12 +19,6 @@ class VariantDetailed extends Component<Props> {
         json = json.replace(/\[\n/gm, '[').replace(/\n]/gm, ']');
         json = json.replace(/},\s*{/gm, "}, {").replace(/\[ *{/gm, "[ {");
         json = json.replace(/}\s*]/gm, "} ]").replace(/ *} ]$/g, "} ]");
-        // let fvIndex = json.indexOf('vertices');
-        // let verticesPart = json.substring(fvIndex);
-        // const svIndex = verticesPart.indexOf(']')+1+fvIndex;
-        // fvIndex = verticesPart.indexOf('[')+fvIndex;
-        // verticesPart = json.substring(fvIndex,svIndex).split('\n').join('').split(' ').join('').split(',').join(', ');
-        // json = json.substr(0,fvIndex) + verticesPart + json.substr(svIndex);
         return json
     }
 
@@ -48,8 +42,7 @@ const mapStateToProps = (state: RootState, props: any) => ({
 });
 
 const mapDispatchToProps = {
-    getVariants: actions.getVariants,
-    getModules: actions.getModules
+    getVariants: actions.getVariants
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(VariantDetailed));
