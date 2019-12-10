@@ -9,7 +9,6 @@ import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 import {RootState} from "../../../redux/rootReducer";
 import {actions} from "../../../redux/actions";
 import {connect} from "react-redux";
-import 'jsoneditor/dist/jsoneditor.min.css';
 import {VariantData} from "../../../redux/reducers/results";
 import {
     Button,
