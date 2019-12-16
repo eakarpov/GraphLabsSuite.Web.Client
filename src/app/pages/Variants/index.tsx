@@ -1,4 +1,4 @@
-import {Component, ReactNode} from "react";
+import {Component, ReactNode, SyntheticEvent} from "react";
 import {Route, RouteComponentProps, withRouter} from "react-router";
 import {InjectedAuthRouterProps} from "redux-auth-wrapper/history3/redirect";
 import {
@@ -27,9 +27,10 @@ import {ModuleData} from "../../../redux/reducers/modules";
 interface VariantsProps {
     state: AppState,
     variants: VariantsState,
-    getVariants: (moduleId?: number) => void,
-    getModules: () => void,
-    modules: ModuleData[]
+    getVariants: typeof actions.getVariants,
+    getModules: typeof actions.getModules,
+    modules: ModuleData[],
+    deleteVariant: typeof actions._deleteVariant
 }
 
 type Props = VariantsProps & RouteComponentProps<{}> & InjectedAuthRouterProps
@@ -127,12 +128,12 @@ class Variants extends Component<Props, State> {
                                 <>
                                     <ListGroupItem className={"variant"} tag={NavLink}
                                                    to={location.pathname === `/variants/${e.id}` ? "/variants" : `/variants/${e.id}`}>
-                                        {e.name}
+                                            {e.name}
                                         <Link className={"pics"} to={`/variants/${e.id}/edit`}
                                               style={{right: "40px", position: "absolute", top: "calc(50% - 19px)"}}>
                                             &#9998;
                                         </Link>
-                                        <Link className={"pics"} to={"link"}
+                                        <Link className={"pics"} to={`#`} onClick={this.deleteVariant(e.id)}
                                               style={{right: "15px", position: "absolute", top: "calc(50% - 19px)"}}>
                                             🗙
                                         </Link>
@@ -145,6 +146,13 @@ class Variants extends Component<Props, State> {
                 </Row>
             </AsyncWrapper>
         </Container>)
+    }
+
+    private deleteVariant(id: number) {
+        return (e: SyntheticEvent<HTMLAnchorElement>) => {
+            e.preventDefault();
+            this.props.deleteVariant(id);
+        }
     }
 
     private handleDropdownToggle() {
@@ -173,7 +181,8 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
     getVariants: actions.getVariants,
-    getModules: actions.getModules
+    getModules: actions.getModules,
+    deleteVariant: actions._deleteVariant
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Variants));

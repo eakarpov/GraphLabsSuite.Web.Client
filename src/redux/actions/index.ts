@@ -23,5 +23,5 @@ export const actions = {
     ...createServiceAction('TaskModule', [ACTION_TYPES.GET, ACTION_TYPES.GET_ONE]),
     ...createServiceAction('TaskVariantLog', [ACTION_TYPES.GET]),
     ...createServiceAction('Me', [ACTION_TYPES.GET_ONE]),
-    ...createServiceAction("Variant", [ACTION_TYPES.EDIT])
+    ...createServiceAction("Variant", [ACTION_TYPES.EDIT, ACTION_TYPES.REMOVE]),
 };

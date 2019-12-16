@@ -37,5 +37,18 @@ export const variants = {
                 dispatch(actions['editVariantAsyncFail']());
             });
         }
+    },
+    _deleteVariant: (id: number) => {
+        return (dispatch: Dispatch) => {
+            dispatch(actions['deleteVariantAsyncStart']());
+            api.deleteVariant(id)
+                .then(() => {
+                    dispatch(actions['deleteVariantAsyncSuccess']());
+                    variants.getVariants()(dispatch);
+                })
+                .catch(() => {
+                    dispatch(actions['deleteVariantAsyncFail']())
+                });
+        }
     }
 };

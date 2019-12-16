@@ -54,6 +54,10 @@ class Api {
         return Connector.post(`odata/taskVariants(${variant.meta.id || 0})`, variant);
     }
 
+    public deleteVariant(id: number) {
+        return Connector.delete(`odata/taskVariants(${id})`, {});
+    }
+
     public uploadModule(id: string, archive: any) {
         return Connector.upload(`odata/taskModules(${id})/upload`, archive, 'application/zip');
     }

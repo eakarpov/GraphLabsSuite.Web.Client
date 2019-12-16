@@ -170,7 +170,7 @@ class VariantEditor extends Component<Props, State> {
                         </TabPane>
                     </TabContent>
                 </Col>
-                <Col sm={{                    size: 3,
+                <Col sm={{size: 3,
                     offset: 1
                 }}>
                     <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}
@@ -244,10 +244,10 @@ class VariantEditor extends Component<Props, State> {
 
     private handleButtonClick2() {
         this.props.saveVariant(this.state.value, this.state.name, this.state.moduleId.toString(), this.props.match.params.id);
-        if (!this.props.match.params.id) {
+        /*if (!this.props.match.params.id) {
             this.props.getVariants();
             this.props.history.push("/variants");
-        }
+        }*/
     }
 
     private handleDropdownToggle2() {
