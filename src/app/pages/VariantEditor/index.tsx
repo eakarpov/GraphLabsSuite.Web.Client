@@ -91,9 +91,9 @@ class VariantEditor extends Component<Props, State> {
         this.getOptionHandler = this.getOptionHandler.bind(this);
         this.triggerTab = this.triggerTab.bind(this);
         this.handleAddButtonClick = this.handleAddButtonClick.bind(this);
-        this.handleDropdownToggle2 = this.handleDropdownToggle2.bind(this);
-        this.handleDropdownClick = this.handleDropdownClick.bind(this);
-        this.handleButtonClick2 = this.handleButtonClick2.bind(this);
+        this.chooseModule = this.chooseModule.bind(this);
+        this.handleModuleDropdownClick = this.handleModuleDropdownClick.bind(this);
+        this.saveVariant = this.saveVariant.bind(this);
         this.updateName = this.updateName.bind(this);
     }
 
@@ -113,11 +113,12 @@ class VariantEditor extends Component<Props, State> {
         }
     }
 
+
     public render(): ReactNode {
         return <Container fluid style={{marginTop: "50px"}}>
             <Row>
                 <Col sm={{
-                    size: 5,
+                    size: 4,
                     offset: 1
                 }}>
                     <Nav tabs>
@@ -165,16 +166,50 @@ class VariantEditor extends Component<Props, State> {
                         </TabPane>
                         <TabPane tabId="3">
                             <div style={{width: "100%", height: "55vh", border: "1px solid #5c7e94"}}>
-                                <p>Здесь будет справка</p>
+                                <div style={{margin: "8px", fontSize: "90%"}}>
+                                    <p>При сохранении нового варианта необходимо указать
+                                    задание, для которого создается данный вариант, и имя варианта.</p>
+                                    <p>Сохранение варианта недоступно в случае, если JSON-файл не валиден или не введено
+                                    имя варианта. Все варианты по умолчанию создаются для модуля "Шаблон".</p>
+                                    <p>Для генерации структуры по шаблону необходимо выбрать структуру из выпадающео списка,
+                                    указать требуемые атрибуты и нажать кнопку "Генерировать структуру графа".</p>
+                                    <p>Кнопка "Добавить еще одну структуру" позволяет добавить больше одной структуры-шаблона
+                                    в JSON-файл. Для этого надо так же выбрать структуры и атрибуты. Добавление
+                                    еще одной структуры для невалидного JSON-файла недоступно.</p>
+                                </div>
                             </div>
                         </TabPane>
                     </TabContent>
                 </Col>
-                <Col sm={{size: 3,
+                <Col sm={{size: 2,
                     offset: 1
                 }}>
-                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}
-                                    style={{marginTop: "40px"}}>
+                    <p style={{marginTop: "40px"}}>Выберите задание</p>
+                    <ButtonDropdown isOpen={this.state.isDropdownOpen2} toggle={this.chooseModule}
+                                    outline color="secondary" style={{marginRight: "0"}}>
+                        <DropdownToggle outline color="secondary" className={"generate"} caret>
+                            {(this.props.modules.find(m => m.id === this.state.moduleId) || {name: ""}).name}
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            {this.props.modules.map(m =>
+                                <DropdownItem
+                                    key={m.id}
+                                    onClick={this.handleModuleDropdownClick(m.id)}
+                                >
+                                    {m.name}
+                                </DropdownItem>)}
+                        </DropdownMenu>
+                    </ButtonDropdown>
+                    <p>Введите имя варианта</p>
+                    <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
+                    <Button className={"generate"} onClick={this.saveVariant} disabled={!this.isJSONCorrect() || !this.state.name} outline
+                            color="secondary">Сохранить</Button>
+                </Col>
+                <Col sm={{size: 2,
+                    offset: 1
+                }}>
+                    <p style={{marginTop: "40px"}}>Сгенерировать структуру по шаблону</p>
+                    <ButtonDropdown isOpen={this.state.isDropdownOpen} toggle={this.handleDropdownToggle}>
                         <DropdownToggle outline color="secondary" className={"generate"} caret>
                             {this.state.currentDropdownOption}
                         </DropdownToggle>
@@ -198,65 +233,59 @@ class VariantEditor extends Component<Props, State> {
                         </DropdownMenu>
                     </ButtonDropdown>
                     <div>
-                        <a>{this.state.labels.label1}</a>
+                        <p>{this.state.labels.label1}</p>
                         <Input className={"generate"} type={"number"} defaultValue="5" onChange={this.updateVertex}>Количество
                             вершин</Input>
-                        <a>{this.state.labels.label2}</a>
+                        <p>{this.state.labels.label2}</p>
                         <Input className={"generate"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
                             ребер</Input>
                         <Button className={"generate"} onClick={this.handleButtonClick} outline
                                 color="secondary">{this.state.labels.structButton}</Button>
-                        <Button className={"generate"} disabled={this.isJSONCorrect()}
+                        <Button className={"generate"} disabled={!this.isJSONCorrect()}
                             onClick={this.handleAddButtonClick} outline color="secondary">
                             Добавить еще одну структуру
                         </Button>
-                        <p>Выберите задание</p>
-                        <ButtonDropdown isOpen={this.state.isDropdownOpen2} toggle={this.handleDropdownToggle2}
-                                        outline color="secondary" style={{marginRight: "0"}}>
-                            <DropdownToggle outline color="secondary" className={"generate"} caret>
-                                {(this.props.modules.find(m => m.id === this.state.moduleId) || {name: ""}).name}
-                            </DropdownToggle>
-                            <DropdownMenu>
-                                {this.props.modules.map(m =>
-                                    <DropdownItem
-                                        key={m.id}
-                                        onClick={this.handleDropdownClick(m.id)}
-                                    >
-                                        {m.name}
-                                    </DropdownItem>)}
-                            </DropdownMenu>
-                        </ButtonDropdown>
-                        <p>Введите имя варианта</p>
-                        <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
-                        <Button className={"generate"} onClick={this.handleButtonClick2} disabled={this.isJSONCorrect()} outline
-                                color="secondary">Сохранить</Button>
                     </div>
                 </Col>
             </Row>
         </Container>
     }
 
+    /**
+     * Обновление имени варианта
+     * @param event
+     */
     private updateName(event: any) {
         this.setState({
             name: event.target.value
         })
     }
 
-    private handleButtonClick2() {
+    /**
+     * Сохранение варианта, переход на страницу просмотра вариантов
+     */
+    private saveVariant() {
         this.props.saveVariant(this.state.value, this.state.name, this.state.moduleId.toString(), this.props.match.params.id);
-        /*if (!this.props.match.params.id) {
+        alert("Вариант \"" + this.state.name + "\" сохранен!")
+        if (!this.props.match.params.id) {
             this.props.getVariants();
-            this.props.history.push("/variants");
-        }*/
+            this.props.history.push(`/variants`);
+        }
     }
 
-    private handleDropdownToggle2() {
+    /**
+     * Открытие списка модулей
+     */
+    private chooseModule() {
         this.setState({
             isDropdownOpen2: !this.state.isDropdownOpen2
         })
     }
 
-    private handleDropdownClick(id: number) {
+    /**
+     * Выбор модуля для варианта
+     */
+    private handleModuleDropdownClick(id: number) {
         return () => {
             this.setState({
                 moduleId: id
@@ -264,6 +293,10 @@ class VariantEditor extends Component<Props, State> {
         }
     }
 
+    /**
+     * Выбор вкладки редактора
+     * @param id
+     */
     private triggerTab(id: string) {
         return (() => {
             this.setState({
@@ -353,13 +386,13 @@ class VariantEditor extends Component<Props, State> {
 
     private updateVertex(event: any) {
         this.setState({
-            vertexAmount: event.target.value
+            vertexAmount: parseInt(event.target.value, 10)
         })
     }
 
     private updateEdge(event: any) {
         this.setState({
-            edgesAmount: event.target.value
+            edgesAmount: parseInt(event.target.value, 10)
         })
     }
 
@@ -372,9 +405,9 @@ class VariantEditor extends Component<Props, State> {
     private isJSONCorrect() {
         try {
             JSON.parse(this.state.value);
-            return false;
-        } catch (e) {
             return true;
+        } catch (e) {
+            return false;
         }
     }
 }
