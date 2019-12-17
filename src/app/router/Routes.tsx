@@ -5,9 +5,11 @@ import Module from "../pages/Module";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Results from "../pages/Results";
-import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
+import {connectedRouterRedirect} from 'redux-auth-wrapper/history4/redirect';
 import {RootState} from "../../redux/rootReducer";
 import Upload from '../pages/Upload';
+import Variants from "../pages/Variants";
+import VariantEditor from "../pages/VariantEditor";
 
 // tslint:disable
 
@@ -22,14 +24,17 @@ const userIsAuthenticated = connectedRouterRedirect({
 });
 
 const Routes = () => (
-    <div style={{ flexGrow: 1 }}>
+    <div style={{flexGrow: 1}}>
         <Switch>
-            <Route path="/" exact component={Home} />
+            <Route path="/" exact component={Home}/>
             <Route path="/auth" exact component={Login}/>
-            <Route path="/results" exact component={userIsAuthenticated(Results)} />
+            <Route path="/results" exact component={userIsAuthenticated(Results)}/>
             <Route path="/modules" component={userIsAuthenticated(Modules)}/>
             <Route path="/module/:moduleId" component={userIsAuthenticated(Module)}/>
-            <Route path="/upload" component={userIsAuthenticated(Upload)} />
+            <Route path="/upload" component={userIsAuthenticated(Upload)}/>
+            <Route path="/variants/:id/edit" exact component={VariantEditor}/>
+            <Route path="/variants/edit" exact component={VariantEditor}/>
+            <Route path="/variants" component={userIsAuthenticated(Variants)}/>
         </Switch>
     </div>
 );

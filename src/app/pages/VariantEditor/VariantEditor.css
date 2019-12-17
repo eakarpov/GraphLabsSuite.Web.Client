@@ -1,0 +1,15 @@
+.ace_editor {
+    border: 1px solid #5c7e94;
+    margin: auto;
+    height: 200px;
+
+}
+
+.generate {
+    width: 350px !important;
+    margin-bottom: 10px;
+}
+
+.generate:last-child {
+    margin-bottom: 0;
+}

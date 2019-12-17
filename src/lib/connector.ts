@@ -88,4 +88,20 @@ export default class Connector {
             return failure(e);
         }
     }
+
+    public static async delete(url: string, body: any) {
+        try {
+            const res = await fetch(Connector.makeUrl(url), {
+                method: 'delete',
+                body: JSON.stringify(body),
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('gl-token')}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            return success(res.status);
+        } catch(e) {
+            return failure(e);
+        }
+    }
 };

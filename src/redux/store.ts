@@ -5,6 +5,7 @@ import rootReducer, {RootState} from './rootReducer';
 import {getInitialArray, getInitialObject} from "./reducers/asyncReducer";
 import {ModuleData} from "./reducers/modules";
 import {ResultData} from "./reducers/results";
+import {VariantsData} from "./reducers/variants";
 
 const initial = {
   modules: getInitialArray<ModuleData>(),
@@ -12,6 +13,7 @@ const initial = {
   state: { logged: false },
   me: getInitialObject<any>(),
   results: getInitialArray<ResultData>(),
+  variants: getInitialArray<VariantsData>()
 };
 
 export function configureStore(initialState: RootState): Store<RootState> {

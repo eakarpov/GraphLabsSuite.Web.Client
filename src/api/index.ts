@@ -1,6 +1,8 @@
 import Connector from "../lib/connector";
 import {Validation} from "fp-ts/lib/Validation";
 import {PageState} from "../app/containers/Page";
+import {VariantsData} from "../redux/reducers/variants";
+
 
 export interface AssetManifest {
     'main.css': string;
@@ -29,8 +31,31 @@ class Api {
         return this.getModuleFile(id, 'index.html', data);
     }
 
+    public getVariantList(moduleId?: number) {
+        if (moduleId) {
+            return Connector.get<{value: VariantsData[]}>(`odata/taskVariants?$filter=taskModule/id+eq+${moduleId}`);
+        }
+        return Connector.get<{value: VariantsData[]}>(`odata/taskVariants`);
+    }
+
     public getVariant(id: number): Promise<Validation<string, string>> {
         return Connector.fetch(`odata/taskModules(${id})/randomVariant`);
+    }
+
+    public saveVariant(variant: {
+        data: any,
+        meta: {
+            name: string,
+            id?: string,
+            moduleId: string
+        }
+    }) {
+        variant.meta.id = variant.meta.id || "0";
+        return Connector.post(`odata/taskVariants(${variant.meta.id || 0})`, variant);
+    }
+
+    public deleteVariant(id: number) {
+        return Connector.delete(`odata/taskVariants(${id})`, {});
     }
 
     public uploadModule(id: string, archive: any) {
