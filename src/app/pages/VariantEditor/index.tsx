@@ -60,7 +60,7 @@ type Props = VariantsProps & RouteComponentProps<{id: string}> & InjectedAuthRou
 class VariantEditor extends Component<Props, State> {
 
     public static defaultProps: Partial<Props> = {
-        variant: {} as VariantData
+        variant: undefined
     };
 
     public state = {
@@ -104,10 +104,16 @@ class VariantEditor extends Component<Props, State> {
 
     public componentDidUpdate(prevProps: Props, prevState: State) {
         if (this.props.variant) {
-            if ((prevProps.variant).variantData !== this.props.variant.variantData) {
+            if ((prevProps.variant || {}).variantData !== this.props.variant.variantData) {
                 this.setState({
                     value: this.props.variant.variantData,
                     name: this.props.variant.name
+                })
+            }
+            console["log"](prevProps, this.props);
+            if (prevState.moduleId !== this.props.variant.taskModule.id) {
+                this.setState({
+                    moduleId: this.props.variant.taskModule.id
                 })
             }
         }
