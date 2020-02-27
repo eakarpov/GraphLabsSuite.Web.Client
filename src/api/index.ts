@@ -33,9 +33,9 @@ class Api {
 
     public getVariantList(moduleId?: number) {
         if (moduleId) {
-            return Connector.get<{value: VariantsData[]}>(`odata/taskVariants?$filter=taskModule/id+eq+${moduleId}`);
+            return Connector.get<{value: VariantsData[]}>(`odata/taskVariants?$expand=taskModule&$filter=taskModule/id+eq+${moduleId}`);
         }
-        return Connector.get<{value: VariantsData[]}>(`odata/taskVariants`);
+        return Connector.get<{value: VariantsData[]}>(`odata/taskVariants?$expand=taskModule`);
     }
 
     public getVariant(id: number): Promise<Validation<string, string>> {

@@ -128,7 +128,7 @@ class Variants extends Component<Props, State> {
                                 <>
                                     <ListGroupItem className={"variant"} tag={NavLink}
                                                    to={location.pathname === `/variants/${e.id}` ? "/variants" : `/variants/${e.id}`}>
-                                            {e.name}
+                                        {e.taskModule.name}: {e.name}
                                         <Link className={"pics"} to={`/variants/${e.id}/edit`}
                                               style={{right: "40px", position: "absolute", top: "calc(50% - 19px)"}}>
                                             &#9998;
