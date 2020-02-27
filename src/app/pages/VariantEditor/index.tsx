@@ -28,6 +28,7 @@ import {
 } from "reactstrap";
 import './VariantEditor.css';
 import {ModuleData} from "../../../redux/reducers/modules";
+import {getJSON} from "./utils/generateStruct";
 
 interface VariantsProps {
     variants: VariantData[],
@@ -123,7 +124,9 @@ class VariantEditor extends Component<Props, State> {
 
     public render(): ReactNode {
         return <Container fluid style={{marginTop: "50px"}}>
-            <Row>
+            <Row style={{
+                minWidth: "1500px"
+            }}>
                 <Col sm={{
                     size: 4,
                     offset: 1
@@ -323,7 +326,7 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleAddButtonClick() {
-        this.handleChange(this.state.value.replace(/]$/, `,\n${this.getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`))
+        this.handleChange(this.state.value.replace(/]$/, `,\n${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`))
     }
 
     private handleDropdownToggle() {
@@ -333,62 +336,7 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        this.handleChange(`[${this.getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`);
-    }
-
-    private getJSON(structToGenerate: string, vertexAmount: number, edgesAmount: number) {
-        switch (structToGenerate) {
-            case "graphV": {
-                const vertices = Array.from(Array(vertexAmount).keys())
-                    .map(e => `"${e}"`)
-                    .join(",");
-                const edges = Array.from(Array(edgesAmount))
-                    .map(() => `{ "sources": "sourceName" , "target": "targetName" }`)
-                    .join(",\n\t");
-                return `{ "type": "graph", "value": {\n` +
-                    `\t"vertices": [${vertices}], \n` +
-                    `\t"edges": \n` +
-                    `\t[${edges}] \n` +
-                    `   } \n` +
-                    `}`;
-            }
-            case "graphVE": {
-                const vertices = Array.from(Array(vertexAmount).keys())
-                    .map(e => `"${e}"`)
-                    .join(",");
-                const edges = Array.from(Array(edgesAmount).keys())
-                    .map(e => `{ "name": "${e}", "sources": "sourceName" , "target": "targetName" }`)
-                    .join(",\n\t");
-                return `{ "type": "graph", "value": {\n` +
-                    `\t"vertices": [${vertices}], \n` +
-                    `\t"edges": \n` +
-                    `\t[${edges}] \n` +
-                    `   } \n` +
-                    `}`;
-            }
-            case "matrix": {
-                const rows = Array.from(Array(vertexAmount).keys())
-                    .map(e => `"${e}"`)
-                    .join(",");
-                const cols = Array.from(Array(edgesAmount).keys())
-                    .map(e => `"${e}"`)
-                    .join(",");
-                const line = Array.from(Array(edgesAmount).keys())
-                    .map(e => `"${e}"`)
-                    .join(",");
-                const matrix = Array.from(Array(vertexAmount))
-                    .map(() => `{${line}}`)
-                    .join(",\n\t");
-                return `{ "type": "matrix", "value": {\n` +
-                    `\t"rows": [${rows}], \n` +
-                    `\t"columns": [${cols}], \n` +
-                    `\t"elements":\n\t [${matrix}] \n` +
-                    `}`;
-            }
-            default: {
-                return "Здесь еще ничего нет";
-            }
-        }
+        this.handleChange(`[${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`);
     }
 
     private updateVertex(event: any) {
