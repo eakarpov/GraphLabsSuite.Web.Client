@@ -30,6 +30,7 @@ import './VariantEditor.css';
 import {ModuleData} from "../../../redux/reducers/modules";
 
 interface VariantsProps {
+    variants: VariantData[],
     variant: VariantData,
     getVariants: () => void,
     modules: ModuleData[],
@@ -208,7 +209,7 @@ class VariantEditor extends Component<Props, State> {
                     </ButtonDropdown>
                     <p>Введите имя варианта</p>
                     <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
-                    <Button className={"generate"} onClick={this.saveVariant} disabled={!this.isJSONCorrect() || !this.state.name} outline
+                    <Button className={"generate"} onClick={this.saveVariant} disabled={!this.isJSONCorrect() || !this.state.name || !this.isNameUnique()} outline
                             color="secondary">Сохранить</Button>
                 </Col>
                 <Col sm={{size: 2,
@@ -416,12 +417,21 @@ class VariantEditor extends Component<Props, State> {
             return false;
         }
     }
+
+    private isNameUnique() {
+        const namesInModule = this.props.variants
+            .filter(e => e.taskModule.id === this.state.moduleId)
+            .filter(e => e.id !== this.props.variant.id)
+            .map(e => e.name);
+        return !namesInModule.some(e => e === this.state.name)
+    }
 }
 
 const mapStateToProps = (state: RootState, props: any) => {
     return {
+        variants: state.variants.data || [],
         variant: (state.variants.data || []).find(e => e.id === parseInt(props.match.params.id, 10)),
-        modules: state.modules.data
+        modules: state.modules.data || []
     };
 };
 
