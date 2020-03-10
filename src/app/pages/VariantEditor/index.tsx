@@ -121,7 +121,6 @@ class VariantEditor extends Component<Props, State> {
         }
     }
 
-
     public render(): ReactNode {
         return <Container fluid style={{marginTop: "50px"}}>
             <Row style={{
@@ -369,7 +368,7 @@ class VariantEditor extends Component<Props, State> {
     private isNameUnique() {
         const namesInModule = this.props.variants
             .filter(e => e.taskModule.id === this.state.moduleId)
-            .filter(e => e.id !== this.props.variant.id)
+            .filter(e => this.props.variant ? e.id !== this.props.variant.id : true)
             .map(e => e.name);
         return !namesInModule.some(e => e === this.state.name)
     }
