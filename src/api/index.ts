@@ -31,7 +31,7 @@ class Api {
         return this.getModuleFile(id, 'index.html', data);
     }
 
-    public getVariantList(moduleId?: number) {
+    public getVariantList(moduleId?: number | string) {
         if (moduleId) {
             return Connector.get<{value: VariantsData[]}>(`odata/taskVariants?$expand=taskModule&$filter=taskModule/id+eq+${moduleId}`);
         }

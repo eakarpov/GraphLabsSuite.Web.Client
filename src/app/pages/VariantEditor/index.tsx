@@ -248,9 +248,9 @@ class VariantEditor extends Component<Props, State> {
                         <p>{this.state.labels.label2}</p>
                         <Input className={"generate"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
                             ребер</Input>
-                        <Button className={"generate"} onClick={this.handleButtonClick} outline
+                        <Button className={"generate"} onClick={this.handleButtonClick} disabled={isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)} outline
                                 color="secondary">{this.state.labels.structButton}</Button>
-                        <Button className={"generate"} disabled={!this.isJSONCorrect()}
+                        <Button className={"generate"} disabled={!this.isJSONCorrect() || isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)}
                             onClick={this.handleAddButtonClick} outline color="secondary">
                             Добавить еще одну структуру
                         </Button>

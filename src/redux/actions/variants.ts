@@ -4,7 +4,7 @@ import api from "../../api";
 
 
 export const variants = {
-    getVariants: (moduleId?: number) => {
+    getVariants: (moduleId?: number | string) => {
         return (dispatch: Dispatch) => {
             dispatch(actions['getVariantListAsyncStart']());
             api.getVariantList(moduleId)
