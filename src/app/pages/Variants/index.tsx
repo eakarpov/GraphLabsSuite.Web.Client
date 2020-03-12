@@ -146,7 +146,7 @@ class Variants extends Component<Props, State> {
         return (e: SyntheticEvent<HTMLAnchorElement>) => {
             e.preventDefault();
             if (confirm(`Вы уверены, что хотиту удалить вариант ${this.props.variants.data.filter(v => v.id === id)[0].name}?`)) {
-                this.props.deleteVariant(id);
+                this.props.deleteVariant(id, (new URLSearchParams(this.props.location.search)).get("moduleId") as any);
             }
         }
     }

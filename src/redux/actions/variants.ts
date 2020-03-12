@@ -38,13 +38,17 @@ export const variants = {
             });
         }
     },
-    _deleteVariant: (id: number) => {
+    _deleteVariant: (id: number, filter?: string | number) => {
         return (dispatch: Dispatch) => {
             dispatch(actions['deleteVariantAsyncStart']());
             api.deleteVariant(id)
                 .then(() => {
                     dispatch(actions['deleteVariantAsyncSuccess']());
-                    variants.getVariants()(dispatch);
+                    if (filter) {
+                        variants.getVariants(filter)(dispatch);
+                    } else {
+                        variants.getVariants()(dispatch);
+                    }
                 })
                 .catch(() => {
                     dispatch(actions['deleteVariantAsyncFail']())
