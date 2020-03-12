@@ -8,8 +8,7 @@ export function generateGraphVE(vertexAmount: number, edgesAmount: number) {
     return `{ "type": "graph", "value": {\n` +
         `\t"vertices": [${vertices}], \n` +
         `\t"edges": \n` +
-        `\t[${edges}], \n` +
-        `\t"answer": "put your answer here"\n` +
+        `\t[${edges}] \n` +
         `   } \n` +
         `}`;
 }

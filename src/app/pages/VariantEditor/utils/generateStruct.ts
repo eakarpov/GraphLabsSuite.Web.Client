@@ -1,4 +1,4 @@
-import {generateMatrix} from "./matrixGenerator";
+import {generateMatrix} from "./generateMatrix";
 import {generateGraphVE} from "./generateGraphVE";
 import {generateGraphV} from "./generateGraphV";
 

@@ -145,7 +145,9 @@ class Variants extends Component<Props, State> {
     private deleteVariant(id: number) {
         return (e: SyntheticEvent<HTMLAnchorElement>) => {
             e.preventDefault();
-            this.props.deleteVariant(id);
+            if (confirm(`Вы уверены, что хотиту удалить вариант ${this.props.variants.data.filter(v => v.id === id)[0].name}?`)) {
+                this.props.deleteVariant(id);
+            }
         }
     }
 
@@ -157,7 +159,6 @@ class Variants extends Component<Props, State> {
 
     private handleDropdownClick(id?: number) {
         return () => {
-            console["log"](this.props.location);
             this.props.history.push(this.props.location.pathname + (id ? "?moduleId=" + id : ""));
         }
     }

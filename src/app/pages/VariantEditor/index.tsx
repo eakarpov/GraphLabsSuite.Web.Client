@@ -112,7 +112,6 @@ class VariantEditor extends Component<Props, State> {
                     name: this.props.variant.name
                 })
             }
-            console["log"](prevProps, this.props);
             if (prevState.moduleId !== this.props.variant.taskModule.id) {
                 this.setState({
                     moduleId: this.props.variant.taskModule.id
@@ -211,7 +210,7 @@ class VariantEditor extends Component<Props, State> {
                     </ButtonDropdown>
                     <p>Введите имя варианта</p>
                     <Input className={"generate"} value={this.state.name} onChange={this.updateName}>Имя</Input>
-                    <Button className={"generate"} onClick={this.saveVariant} disabled={!this.isJSONCorrect() || !this.state.name || !this.isNameUnique()} outline
+                    <Button className={"generate"} onClick={this.saveVariant} disabled={!this.isJSONCorrect()} outline
                             color="secondary">Сохранить</Button>
                 </Col>
                 <Col sm={{size: 2,
@@ -274,11 +273,27 @@ class VariantEditor extends Component<Props, State> {
      * Сохранение варианта, переход на страницу просмотра вариантов
      */
     private saveVariant() {
-        this.props.saveVariant(this.state.value, this.state.name, this.state.moduleId.toString(), this.props.match.params.id);
-        alert("Вариант \"" + this.state.name + "\" сохранен!")
-        if (!this.props.match.params.id) {
-            this.props.getVariants();
-            this.props.history.push(`/variants`);
+        if (!this.state.name) {
+            alert ("Нельзя пустое имя")
+        } else if (!this.isNameUnique()) {
+            alert ("Имя уже занято")
+        } else if (!/^(0|[1-9][0-9]*|true|false)$/.test(JSON.parse(this.state.value).answer)) {
+            alert ("Неправильный формат ответа");
+        } else {
+            let conf = false;
+            if (this.props.match.params.id) {
+                conf = confirm("Это перезапишет старый вариант. Вы уверены?");
+            } else {
+                conf = true;
+            }
+            if (conf) {
+                this.props.saveVariant(this.state.value, this.state.name, this.state.moduleId.toString(), this.props.match.params.id);
+                alert("Вариант \"" + this.state.name + "\" сохранен!")
+                if (!this.props.match.params.id) {
+                    this.props.getVariants();
+                    this.props.history.push(`/variants`);
+                }
+            }
         }
     }
 
@@ -325,7 +340,7 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleAddButtonClick() {
-        this.handleChange(this.state.value.replace(/]$/, `,\n${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`))
+        this.handleChange(this.state.value.replace(/],\s*"answer":(.*?)}$/, `,\n${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}], "answer": $1}`))
     }
 
     private handleDropdownToggle() {
@@ -335,7 +350,7 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        this.handleChange(`[${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}]`);
+        this.handleChange(`{"task":[${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}], "answer": "answer"}`);
     }
 
     private updateVertex(event: any) {

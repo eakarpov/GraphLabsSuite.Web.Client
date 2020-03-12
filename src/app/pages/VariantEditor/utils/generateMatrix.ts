@@ -14,7 +14,6 @@ export function generateMatrix(vertexAmount: number, edgesAmount: number) {
     return `{ "type": "matrix", "value": {\n` +
         `\t"rows": [${rows}], \n` +
         `\t"columns": [${cols}], \n` +
-        `\t"elements":\n\t [${matrix}], \n` +
-        `\t"answer": "put your answer here"\n` +
+        `\t"elements":\n\t [${matrix}] \n` +
         `}}`;
 }
