@@ -1,9 +1,16 @@
 import {VariantWithAnswer} from "./generateStruct";
 
 export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmount: number, edgesAmount: number): VariantWithAnswer<"graph"> | VariantWithAnswer<"n-graphs"> {
+    const pairs = Array.from(Array(vertexAmount).keys())
+        .map(v1 => Array.from(Array(vertexAmount).keys()).filter(v => v > v1).map(v2 => [v1,v2]))
+        .reduce((arr1, arr2) => arr1.concat(arr2))
+        .sort(() => Math.random() - 0.5).slice(0, edgesAmount);
     if (struct) {
         switch (struct.task.type) {
             case "graph": {
+                alert(Array.from(Array(vertexAmount).keys())
+                    .map(v1 => Array.from(Array(vertexAmount).keys()).filter(v => v > v1).map(v2 => [v1,v2]))
+                    .sort(() => Math.random() - 0.5).slice(0, edgesAmount));
                 return {
                     answer: struct.answer,
                     task: {
@@ -14,11 +21,10 @@ export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmou
                                 struct.task.value,
                                 {
                                     vertices: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
-                                    edges: Array.from(Array(edgesAmount))
-                                        .map(() => ({
-                                            source: `${Math.floor(Math.random() * vertexAmount)}`,
-                                            target: `${Math.floor(Math.random() * vertexAmount)}`
-                                        }))
+                                    edges: pairs.map(pair => ({
+                                        source: `${pair[0]}`,
+                                        target: `${pair[1]}`
+                                    }))
                                 }
                             ]
                         }
@@ -34,11 +40,10 @@ export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmou
                             count: struct.task.value.count + 1,
                             graphs: struct.task.value.graphs.concat({
                                 vertices: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
-                                edges: Array.from(Array(edgesAmount))
-                                    .map(() => ({
-                                        source: `${Math.floor(Math.random() * vertexAmount)}`,
-                                        target: `${Math.floor(Math.random() * vertexAmount)}`
-                                    }))
+                                edges: pairs.map(pair => ({
+                                    source: `${pair[0]}`,
+                                    target: `${pair[1]}`
+                                }))
                             })
                         }
                     }
@@ -55,10 +60,9 @@ export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmou
                 type: "graph",
                 value: {
                     vertices: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
-                    edges: Array.from(Array(edgesAmount))
-                        .map(() => ({
-                            source: `${Math.floor(Math.random() * vertexAmount)}`,
-                            target: `${Math.floor(Math.random() * vertexAmount)}`
+                    edges: pairs.map(pair => ({
+                            source: `${pair[0]}`,
+                            target: `${pair[1]}`
                         }))
                 }
             }

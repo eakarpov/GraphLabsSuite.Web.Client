@@ -340,11 +340,16 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleAddButtonClick() {
-        try {
-            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-        } catch (e) {
-            console["log"](e);
-            alert(e.message);
+        if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+        {
+            try {
+                this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+        else {
+            alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
         }
     }
 
@@ -355,10 +360,16 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        try {
-            this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-        } catch (e) {
-            alert(e.message);
+        if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+        {
+            try {
+                this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+        else {
+            alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
         }
     }
 
