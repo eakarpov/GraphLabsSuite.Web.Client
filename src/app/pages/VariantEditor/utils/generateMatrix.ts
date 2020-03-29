@@ -17,7 +17,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                                     columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
                                     elements: Array.from(Array(vertexAmount))
                                         .map(() => Array.from(Array(edgesAmount).keys())
-                                            .map(e => `${Math.round(Math.random())}`))
+                                            .map(() => `${Math.round(Math.random())}`))
                                 }
                             ]
                         }
@@ -37,7 +37,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                                 columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
                                 elements: Array.from(Array(vertexAmount))
                                     .map(() => Array.from(Array(edgesAmount).keys())
-                                        .map(e => `${Math.round(Math.random())}`))
+                                        .map(() => `${Math.round(Math.random())}`))
                             })
                         }
                     }
@@ -57,7 +57,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                     columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
                     elements: Array.from(Array(vertexAmount))
                         .map(() => Array.from(Array(edgesAmount).keys())
-                            .map(e => `${Math.round(Math.random())}`))
+                            .map(() => `${Math.round(Math.random())}`))
                 }
             }
         }

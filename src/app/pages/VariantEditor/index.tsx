@@ -340,16 +340,43 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleAddButtonClick() {
-        if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
-        {
-            try {
-                this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-            } catch (e) {
-                alert(e.message);
+        switch (this.state.structToGenerate) {
+            case "graphV": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
             }
-        }
-        else {
-            alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+            case "graphVE": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
+            }
+            case "matrix": {
+                try {
+                    this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                } catch (e) {
+                    alert(e.message);
+                }
+                break;
+            }
         }
     }
 
@@ -360,16 +387,43 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
-        {
-            try {
-                this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-            } catch (e) {
-                alert(e.message);
+        switch (this.state.structToGenerate) {
+            case "graphV": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
             }
-        }
-        else {
-            alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+            case "graphVE": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
+            }
+            case "matrix": {
+                try {
+                    this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                } catch (e) {
+                    alert(e.message);
+                }
+                break;
+            }
         }
     }
 

@@ -8,9 +8,6 @@ export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmou
     if (struct) {
         switch (struct.task.type) {
             case "graph": {
-                alert(Array.from(Array(vertexAmount).keys())
-                    .map(v1 => Array.from(Array(vertexAmount).keys()).filter(v => v > v1).map(v2 => [v1,v2]))
-                    .sort(() => Math.random() - 0.5).slice(0, edgesAmount));
                 return {
                     answer: struct.answer,
                     task: {
