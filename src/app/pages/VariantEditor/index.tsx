@@ -274,7 +274,7 @@ class VariantEditor extends Component<Props, State> {
      */
     private saveVariant() {
         if (!this.state.name) {
-            alert ("Нельзя пустое имя")
+            alert ("Нельзя указать пустое имя")
         } else if (!this.isNameUnique()) {
             alert ("Имя уже занято")
         } else if (!/^(0|[1-9][0-9]*|true|false)$/.test(JSON.parse(this.state.value).answer)) {
@@ -340,7 +340,12 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleAddButtonClick() {
-        this.handleChange(this.state.value.replace(/],\s*"answer":(.*?)}$/, `,\n${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}], "answer": $1}`))
+        try {
+            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+        } catch (e) {
+            console["log"](e);
+            alert(e.message);
+        }
     }
 
     private handleDropdownToggle() {
@@ -350,7 +355,11 @@ class VariantEditor extends Component<Props, State> {
     }
 
     private handleButtonClick() {
-        this.handleChange(`{"task":[${getJSON(this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount)}], "answer": "answer"}`);
+        try {
+            this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+        } catch (e) {
+            alert(e.message);
+        }
     }
 
     private updateVertex(event: any) {
