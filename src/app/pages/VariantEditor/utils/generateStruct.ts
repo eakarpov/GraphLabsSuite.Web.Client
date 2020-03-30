@@ -63,7 +63,10 @@ export function getJSON(currentStruct: string, structToGenerate: string, vertexA
             return JSON.stringify(generateGraphVE(struct, vertexAmount, edgesAmount), null, 1);
         }
         case "matrix": {
-            return JSON.stringify(generateMatrix(struct, vertexAmount, edgesAmount), null, 1);
+            return JSON.stringify(generateMatrix(struct, vertexAmount, edgesAmount, false), null, 1);
+        }
+        case "symMatrix": {
+            return JSON.stringify(generateMatrix(struct, vertexAmount, edgesAmount, true), null, 1);
         }
         default: {
             return "Здесь еще ничего нет";

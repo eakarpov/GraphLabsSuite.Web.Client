@@ -86,7 +86,7 @@ class VariantEditor extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.handleAddAnotherButtonClick = this.handleAddAnotherButtonClick.bind(this);
         this.updateVertex = this.updateVertex.bind(this);
         this.updateEdge = this.updateEdge.bind(this);
         this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
@@ -247,10 +247,10 @@ class VariantEditor extends Component<Props, State> {
                         <p>{this.state.labels.label2}</p>
                         <Input className={"generate"} type={"number"} defaultValue="6" onChange={this.updateEdge}>Количество
                             ребер</Input>
-                        <Button className={"generate"} onClick={this.handleButtonClick} disabled={isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)} outline
+                        <Button className={"generate"} onClick={this.handleAddButtonClick} disabled={isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)} outline
                                 color="secondary">{this.state.labels.structButton}</Button>
                         <Button className={"generate"} disabled={!this.isJSONCorrect() || isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)}
-                            onClick={this.handleAddButtonClick} outline color="secondary">
+                            onClick={this.handleAddAnotherButtonClick} outline color="secondary">
                             Добавить еще одну структуру
                         </Button>
                     </div>
@@ -339,7 +339,7 @@ class VariantEditor extends Component<Props, State> {
         })
     }
 
-    private handleAddButtonClick() {
+    private handleAddAnotherButtonClick() {
         switch (this.state.structToGenerate) {
             case "graphV": {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
@@ -370,10 +370,28 @@ class VariantEditor extends Component<Props, State> {
                 break;
             }
             case "matrix": {
-                try {
-                    this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-                } catch (e) {
-                    alert(e.message);
+                if (this.state.vertexAmount === this.state.edgesAmount) {
+                    if (confirm("Хотите сгенерировать симметричную матрицу?")) {
+                        try {
+                            this.handleChange(getJSON(this.state.value, "symMatrix", this.state.vertexAmount, this.state.edgesAmount));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                    else {
+                        try {
+                            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                }
+                else {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
                 }
                 break;
             }
@@ -386,7 +404,7 @@ class VariantEditor extends Component<Props, State> {
         })
     }
 
-    private handleButtonClick() {
+    private handleAddButtonClick() {
         switch (this.state.structToGenerate) {
             case "graphV": {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
@@ -417,10 +435,28 @@ class VariantEditor extends Component<Props, State> {
                 break;
             }
             case "matrix": {
-                try {
-                    this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
-                } catch (e) {
-                    alert(e.message);
+                if (this.state.vertexAmount === this.state.edgesAmount) {
+                    if (confirm("Хотите сгенерировать симметричную матрицу?")) {
+                        try {
+                            this.handleChange(getJSON("", "symMatrix", this.state.vertexAmount, this.state.edgesAmount));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                    else {
+                        try {
+                            this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                }
+                else {
+                    try {
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                    } catch (e) {
+                        alert(e.message);
+                    }
                 }
                 break;
             }

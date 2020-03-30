@@ -1,6 +1,16 @@
 import {VariantWithAnswer} from "./generateStruct";
 
-export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmount: number, edgesAmount: number): VariantWithAnswer<"matrix"> | VariantWithAnswer<"n-matrices"> {
+export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmount: number, edgesAmount: number, isSym: boolean): VariantWithAnswer<"matrix"> | VariantWithAnswer<"n-matrices"> {
+     const elements = Array.from(Array(vertexAmount))
+        .map(() => Array.from(Array(edgesAmount).keys())
+            .map(() => Math.round(Math.random())));
+    if (isSym) {
+        for (let i = 0; i < vertexAmount; i++) {
+            for (let j = i; j < vertexAmount; j++) {
+                (i === j) ? elements[i][j] = 0 : elements[i][j] = elements[j][i]
+            }
+        }
+    }
     if (struct) {
         switch (struct.task.type) {
             case "matrix": {
@@ -15,9 +25,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                                 {
                                     rows: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
                                     columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
-                                    elements: Array.from(Array(vertexAmount))
-                                        .map(() => Array.from(Array(edgesAmount).keys())
-                                            .map(() => `${Math.round(Math.random())}`))
+                                    elements: elements.map(e => e.map(a => `${a}`))
                                 }
                             ]
                         }
@@ -35,9 +43,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                             matrices: struct.task.value.matrices.concat({
                                 rows: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
                                 columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
-                                elements: Array.from(Array(vertexAmount))
-                                    .map(() => Array.from(Array(edgesAmount).keys())
-                                        .map(() => `${Math.round(Math.random())}`))
+                                elements: elements.map(e => e.map(a => `${a}`))
                             })
                         }
                     }
@@ -55,9 +61,7 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
                 value: {
                     rows: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
                     columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
-                    elements: Array.from(Array(vertexAmount))
-                        .map(() => Array.from(Array(edgesAmount).keys())
-                            .map(() => `${Math.round(Math.random())}`))
+                    elements: elements.map(e => e.map(a => `${a}`))
                 }
             }
         }
