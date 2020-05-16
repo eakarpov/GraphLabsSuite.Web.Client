@@ -5,8 +5,10 @@ import rootReducer, {RootState} from './rootReducer';
 import {getInitialArray, getInitialObject} from "./reducers/asyncReducer";
 import {ModuleData} from "./reducers/modules";
 import {ResultData} from "./reducers/results";
+import {Subject} from "./reducers/test";
 
 const initial = {
+  test: getInitialArray<Subject>(),
   modules: getInitialArray<ModuleData>(),
   module: getInitialObject<any>(),
   state: { logged: false },

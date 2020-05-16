@@ -9,6 +9,11 @@ export interface AssetManifest {
 }
 
 class Api {
+
+    public getSubjects(){
+        return Connector.get('odata/subjects');
+    }
+
     public getModules() {
         return Connector.get('odata/taskModules');
     }

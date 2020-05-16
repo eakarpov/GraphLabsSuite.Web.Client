@@ -7,8 +7,12 @@ import {init} from "./lib/connector";
 import {Promise} from 'bluebird';
 global.Promise = Promise;
 
+// init({
+//     hostBase: 'http://gl-backend.svtz.ru:5000/'
+// });
+
 init({
-    hostBase: 'http://gl-backend.svtz.ru:5000/'
+    hostBase: 'http://bab320a0.ngrok.io/'
 });
 
 ReactDOM.render(

@@ -48,6 +48,7 @@ class Modules extends Component<Props> {
     }
 
     public render() {
+        console.log(this.props);
         return (<Container>
             <Row>
                 <Col md={12}>
