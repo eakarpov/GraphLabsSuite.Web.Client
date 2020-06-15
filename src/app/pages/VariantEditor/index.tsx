@@ -87,6 +87,7 @@ class VariantEditor extends Component<Props, State> {
         super(props);
         this.handleChange = this.handleChange.bind(this);
         this.handleAddAnotherButtonClick = this.handleAddAnotherButtonClick.bind(this);
+        this.handleAddAnswerButtonClick = this.handleAddAnswerButtonClick.bind(this);
         this.updateVertex = this.updateVertex.bind(this);
         this.updateEdge = this.updateEdge.bind(this);
         this.handleDropdownToggle = this.handleDropdownToggle.bind(this);
@@ -253,6 +254,10 @@ class VariantEditor extends Component<Props, State> {
                             onClick={this.handleAddAnotherButtonClick} outline color="secondary">
                             Добавить еще одну структуру
                         </Button>
+                        <Button className={"generate"} disabled={!this.isJSONCorrect() || isNaN(this.state.vertexAmount) || isNaN(this.state.edgesAmount)}
+                                onClick={this.handleAddAnswerButtonClick} outline color="secondary">
+                            Добавить структуру в ответ
+                        </Button>
                     </div>
                 </Col>
             </Row>
@@ -339,13 +344,13 @@ class VariantEditor extends Component<Props, State> {
         })
     }
 
-    private handleAddAnotherButtonClick() {
+    private handleAddAnswerButtonClick() {
         switch (this.state.structToGenerate) {
             case "graphV": {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
                 {
                     try {
-                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, true));
                     } catch (e) {
                         alert(e.message);
                     }
@@ -359,7 +364,7 @@ class VariantEditor extends Component<Props, State> {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
                 {
                     try {
-                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, true));
                     } catch (e) {
                         alert(e.message);
                     }
@@ -373,14 +378,14 @@ class VariantEditor extends Component<Props, State> {
                 if (this.state.vertexAmount === this.state.edgesAmount) {
                     if (confirm("Хотите сгенерировать симметричную матрицу?")) {
                         try {
-                            this.handleChange(getJSON(this.state.value, "symMatrix", this.state.vertexAmount, this.state.edgesAmount));
+                            this.handleChange(getJSON(this.state.value, "symMatrix", this.state.vertexAmount, this.state.edgesAmount, true));
                         } catch (e) {
                             alert(e.message);
                         }
                     }
                     else {
                         try {
-                            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, true));
                         } catch (e) {
                             alert(e.message);
                         }
@@ -388,7 +393,67 @@ class VariantEditor extends Component<Props, State> {
                 }
                 else {
                     try {
-                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, true));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                break;
+            }
+        }
+    }
+
+
+    private handleAddAnotherButtonClick() {
+        switch (this.state.structToGenerate) {
+            case "graphV": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
+            }
+            case "graphVE": {
+                if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
+                {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                }
+                else {
+                    alert("Указано слишком большое количество ребер! Число ребер не должно превышать " + this.state.vertexAmount * (this.state.vertexAmount - 1) / 2)
+                }
+                break;
+            }
+            case "matrix": {
+                if (this.state.vertexAmount === this.state.edgesAmount) {
+                    if (confirm("Хотите сгенерировать симметричную матрицу?")) {
+                        try {
+                            this.handleChange(getJSON(this.state.value, "symMatrix", this.state.vertexAmount, this.state.edgesAmount, false));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                    else {
+                        try {
+                            this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }
+                }
+                else {
+                    try {
+                        this.handleChange(getJSON(this.state.value, this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
                     } catch (e) {
                         alert(e.message);
                     }
@@ -410,7 +475,7 @@ class VariantEditor extends Component<Props, State> {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
                 {
                     try {
-                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
                     } catch (e) {
                         alert(e.message);
                     }
@@ -424,7 +489,7 @@ class VariantEditor extends Component<Props, State> {
                 if (this.state.edgesAmount <= this.state.vertexAmount*(this.state.vertexAmount - 1)/2)
                 {
                     try {
-                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
                     } catch (e) {
                         alert(e.message);
                     }
@@ -438,14 +503,14 @@ class VariantEditor extends Component<Props, State> {
                 if (this.state.vertexAmount === this.state.edgesAmount) {
                     if (confirm("Хотите сгенерировать симметричную матрицу?")) {
                         try {
-                            this.handleChange(getJSON("", "symMatrix", this.state.vertexAmount, this.state.edgesAmount));
+                            this.handleChange(getJSON("", "symMatrix", this.state.vertexAmount, this.state.edgesAmount, false));
                         } catch (e) {
                             alert(e.message);
                         }
                     }
                     else {
                         try {
-                            this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                            this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
                         } catch (e) {
                             alert(e.message);
                         }
@@ -453,7 +518,7 @@ class VariantEditor extends Component<Props, State> {
                 }
                 else {
                     try {
-                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount));
+                        this.handleChange(getJSON("", this.state.structToGenerate, this.state.vertexAmount, this.state.edgesAmount, false));
                     } catch (e) {
                         alert(e.message);
                     }

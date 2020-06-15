@@ -67,3 +67,45 @@ export function generateMatrix(struct: VariantWithAnswer | undefined, vertexAmou
         }
     }
 }
+
+export function generateAnswerMatrix(struct: VariantWithAnswer | undefined, vertexAmount: number, edgesAmount: number, isSym: boolean): VariantWithAnswer {
+    const elements = Array.from(Array(vertexAmount))
+        .map(() => Array.from(Array(edgesAmount).keys())
+            .map(() => Math.round(Math.random())));
+    if (isSym) {
+        for (let i = 0; i < vertexAmount; i++) {
+            for (let j = i; j < vertexAmount; j++) {
+                (i === j) ? elements[i][j] = 0 : elements[i][j] = elements[j][i]
+            }
+        }
+    }
+    if (struct) {
+        return {
+            answer: {
+                type: "matrix",
+                value: {
+                    rows: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
+                    columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
+                    elements: elements.map(e => e.map(a => `${a}`))
+                    }
+                },
+            task: struct.task
+        }
+    }
+    else {
+        return {
+            answer: {
+                type: "matrix",
+                value: {
+                    rows: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
+                    columns: Array.from(Array(edgesAmount).keys()).map(e => `${e}`),
+                    elements: elements.map(e => e.map(a => `${a}`))
+                }
+            },
+            task: {
+                type: "type",
+                value: "value"
+            }
+        }
+    }
+}

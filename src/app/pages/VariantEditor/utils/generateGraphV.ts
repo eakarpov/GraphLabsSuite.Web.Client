@@ -66,3 +66,43 @@ export function generateGraphV(struct: VariantWithAnswer | undefined, vertexAmou
         }
     }
 }
+
+export function generateAnswerGraphV(struct: VariantWithAnswer | undefined, vertexAmount: number, edgesAmount: number): VariantWithAnswer {
+    const pairs = Array.from(Array(vertexAmount).keys())
+        .map(v1 => Array.from(Array(vertexAmount).keys()).filter(v => v > v1).map(v2 => [v1,v2]))
+        .reduce((arr1, arr2) => arr1.concat(arr2))
+        .sort(() => Math.random() - 0.5).slice(0, edgesAmount);
+    if (struct) {
+        return {
+            answer: {
+                type: "graph",
+                value: {
+                    vertices: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
+                    edges: pairs.map(pair => ({
+                        source: `${pair[0]}`,
+                        target: `${pair[1]}`
+                    }))
+                }
+            },
+            task: struct.task
+        }
+    }
+    else {
+        return {
+            answer: {
+                type: "graph",
+                value: {
+                    vertices: Array.from(Array(vertexAmount).keys()).map(e => `${e}`),
+                    edges: pairs.map(pair => ({
+                        source: `${pair[0]}`,
+                        target: `${pair[1]}`
+                    }))
+                }
+            },
+            task: {
+                type: "type",
+                value: "value"
+            }
+        }
+    }
+}
